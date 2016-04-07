@@ -2,7 +2,7 @@ import isArray from 'lodash/isArray'
 import isObject from 'lodash/isObject'
 import keyBy from 'lodash/keyBy'
 
-import createAction from '../../createAction'
+import createAction from '../createAction'
 
 export const DEL = 'graph/entity/DEL'
 export const del = createAction(DEL)
