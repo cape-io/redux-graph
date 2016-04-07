@@ -1,0 +1,64 @@
+{
+  "name": "redux-graph",
+  "version": "1.0.0",
+  "description": "Redux graph database.",
+  "homepage": "https://github.com/cape-io/redux-graph",
+  "author": "Kai Curry <kai@cape.io> (http://www.cape.io/)",
+  "main": "lib/index",
+  "repository": "cape-io/redux-field",
+  "bugs": {
+    "url": "https://github.com/cape-io/redux-graph/issues"
+  },
+  "tags": [
+    "react",
+    "redux",
+    "graph",
+    "database"
+  ],
+  "keywords": [
+    "react",
+    "redux",
+    "graph",
+    "database"
+  ],
+  "license": "MIT",
+  "scripts": {
+    "build": "mkdir -p lib && babel ./src -d lib",
+    "lint": "eslint examples src test",
+    "test": "babel-tape-runner test/**/*spec.js | faucet",
+    "prepublish": "npm run build"
+  },
+  "dependencies": {
+    "lodash": "^4.6.1",
+    "redux": "^3.3.1",
+    "seamless-immutable": "^5.1.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.6.5",
+    "babel-core": "^6.7.2",
+    "babel-eslint": "^6.0.0",
+    "babel-loader": "^6.2.4",
+    "babel-plugin-react-transform": "^2.0.2",
+    "babel-polyfill": "^6.7.2",
+    "babel-preset-es2015": "^6.6.0",
+    "babel-preset-react": "^6.5.0",
+    "babel-preset-stage-1": "^6.5.0",
+    "babel-register": "^6.7.2",
+    "babel-tape-runner": "^2.0.1",
+    "eslint": "^2.5.3",
+    "eslint-config-airbnb": "^6.1.0",
+    "eslint-plugin-babel": "^3.1.0",
+    "eslint-plugin-import": "^1.4.0",
+    "eslint-plugin-react": "^4.2.3",
+    "faucet": "0.0.1",
+    "react": "^0.14.8",
+    "redux": "^3.2.1",
+    "redux-devtools": "^3.1.0",
+    "redux-devtools-dock-monitor": "^1.1.0",
+    "redux-devtools-log-monitor": "^1.0.5",
+    "tape": "^4.5.1",
+    "webpack": "^1.12.14",
+    "webpack-dev-middleware": "^1.6.0",
+    "webpack-hot-middleware": "^2.10.0"
+  }
+}
