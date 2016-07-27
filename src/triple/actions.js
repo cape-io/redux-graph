@@ -20,7 +20,7 @@ export function buildTriple({ predicate, object, subject, id }) {
 export const PUT = 'graph/triple/PUT'
 // You send it an object with an id, object, subject and predicate properties.
 export const put = createAction(PUT, ({ predicate, object, subject, id }) => {
-  if (!isString(predicate) || !object.id || !subject.id) {
+  if ((!isString(predicate) || !subject.id || !object.id) && !id) {
     throw new Error('Triple must include predicate, object, subject.')
   }
   if (id && (!isArray(id) || id.length !== 3)) {

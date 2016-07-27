@@ -1,7 +1,7 @@
 // import util from 'util'
 import test from 'tape'
-import { getSXX } from './triple/select'
-import reducer, { triplePut } from './index'
+import { getSXX } from '../src/triple/select'
+import reducer, { triplePut, entityUpdate } from '../src/index'
 
 const tripleState = {
   spo: {
@@ -28,10 +28,10 @@ test('reducer and put action', assert => {
     pos: { email: { lk4: { tim: true } } },
     pso: { email: { tim: { lk4: true } } },
   }
-  const result = reducer(undefined, triplePut(timEmailArray))
-  assert.deepEquals(result, expected, 'result matches expected')
+  const result = reducer(undefined, triplePut(timEmailObject))
+  assert.deepEquals(result.triple, expected, 'result matches expected')
   const result2 = reducer(undefined, triplePut(timEmailObject))
-  assert.deepEquals(result2, expected, 'result2 matches expected')
+  assert.deepEquals(result2.triple, expected, 'result2 matches expected')
   assert.end()
 })
 
@@ -43,4 +43,11 @@ test('getSXX selector', assert => {
   ]
   assert.deepEquals(result, expected, 'result returns both triples.')
   assert.end()
+})
+
+test('entityUpdate', t => {
+  const entity = { id: 'foo', bar: true }
+  const result = reducer({}, entityUpdate(entity))
+  t.deepEquals(result.entity.foo, entity)
+  t.end()
 })
