@@ -4,6 +4,11 @@ import { createSelector } from 'reselect'
 
 import { graphSelector } from '../select'
 export const entitySelector = state => graphSelector(state).entity
+
+export function selectEntityById(state, id) {
+  return entitySelector(state)[id]
+}
+
 export function selectEntity(entityIdSelect) {
   return state => {
     const entityId = isFunction(entityIdSelect) ? entityIdSelect(state) : entityIdSelect

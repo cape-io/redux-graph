@@ -1,11 +1,14 @@
 import { combineReducers } from 'redux'
 
+export { create, createTriple } from './helpers'
+
 import entity from './entity/reducer'
 export {
   del as entityDel,
   put as entityPut,
   putAll as entityPutAll,
   update as entityUpdate,
+  UPDATE as ENTITY_UPDATE,
 } from './entity/actions'
 
 import triple from './triple/reducer'

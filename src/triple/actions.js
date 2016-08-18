@@ -1,33 +1,33 @@
 import isArray from 'lodash/isArray'
-import isString from 'lodash/isString'
 import map from 'lodash/map'
 import pick from 'lodash/pick'
 
 import createAction from '../createAction'
+import { tripleValidate } from './helpers'
 
 export const DEL = 'graph/triple/DEL'
 export const del = createAction(DEL)
 
-export function buildTriple({ predicate, object, subject, id }) {
+export function getId({ id, predicate, object, subject }) {
+  return id || [ subject.id, predicate, object.id ]
+}
+export function pickFields(item) {
+  return pick(item, 'id', 'type')
+}
+// triple object, subject must have id fields.
+export function buildTriple(triple) {
+  tripleValidate(triple, true)
   return {
-    id: id || [ subject.id, predicate, object.id ],
-    object: pick(object, 'id', 'type'),
-    predicate,
-    subject: pick(subject, 'id', 'type'),
+    ...triple,
+    id: getId(triple),
+    object: pickFields(triple.object),
+    subject: pickFields(triple.subject),
   }
 }
 
 export const PUT = 'graph/triple/PUT'
 // You send it an object with an id, object, subject and predicate properties.
-export const put = createAction(PUT, ({ predicate, object, subject, id }) => {
-  if ((!isString(predicate) || !subject.id || !object.id) && !id) {
-    throw new Error('Triple must include predicate, object, subject.')
-  }
-  if (id && (!isArray(id) || id.length !== 3)) {
-    throw new Error('Triple id must have a length between three and five.')
-  }
-  return buildTriple({ predicate, object, subject, id })
-})
+export const put = createAction(PUT, buildTriple)
 
 export const PUT_ALL = 'graph/triple/PUT_ALL'
 export const putAll = createAction(PUT_ALL, values => {
