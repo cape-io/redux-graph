@@ -5,7 +5,7 @@ import { insertFields, isEntity, isEntityCreated } from './entity/helpers'
 import { entityPut, triplePut } from './'
 import { isTriple } from './triple/helpers'
 
-
+// Dispatch new entity if it doesn't have an id field. Otherwise returns entity.
 export function createIfNew(dispatch, entity) {
   if (isEntityCreated(entity)) return entity
   const item = insertFields(entity)
@@ -13,6 +13,7 @@ export function createIfNew(dispatch, entity) {
   return item
 }
 
+// Dispatch new entities and triples.
 export function createTriple(dispatch, triple) {
   isTriple(triple)
   const subject = createIfNew(dispatch, triple.subject)
@@ -32,6 +33,7 @@ export function propHandler(dispatch, subject) {
   }
 }
 
+// Create triples and dispatch required actions.
 export function create(dispatch, entity) {
   // Create an id for the new entity.
   const subject = entity.id ? entity : insertFields(entity)
