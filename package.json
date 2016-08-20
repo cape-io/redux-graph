@@ -1,11 +1,11 @@
 {
   "name": "redux-graph",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Redux graph database.",
   "homepage": "https://github.com/cape-io/redux-graph",
   "author": "Kai Curry <kai@cape.io> (http://www.cape.io/)",
   "main": "lib/index",
-  "repository": "cape-io/redux-field",
+  "repository": "cape-io/redux-graph",
   "bugs": {
     "url": "https://github.com/cape-io/redux-graph/issues"
   },
