@@ -5,6 +5,32 @@ Really basic graph database with entity and triple storage with some helper func
 Each entity must have a unique `id` field and a `type` field.
 The triple `id` is in the format of `[ subjectId, predicate, objectId ]`.
 
+## Reducer
+
+The reducer is default export.
+
+```javascript
+import graph from 'redux-graph'
+const reducerIndex = {
+  graph,
+}
+const reducer = combineReducers(reducerIndex)
+const store = createStore(reducer)
+```
+
+## Entity Actions
+
+* entityDel
+* entityPut
+* entityPutAll
+* entityUpdate
+
+## Triple Actions
+
+* tripleDel
+* triplePut
+* triplePutAll
+
 ## Helper functions.
 
 * `create(dispatch, item)` will create required triples and objects.
