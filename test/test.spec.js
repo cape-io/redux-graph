@@ -1,5 +1,6 @@
-// import util from 'util'
 import test from 'tape'
+import { keys } from 'lodash'
+
 import { getSXX } from '../src/triple/select'
 import reducer, { triplePut, entityUpdate } from '../src/index'
 
@@ -17,22 +18,35 @@ const tripleState = {
 }
 
 // console.log(util.inspect(res, false, null))
-test('reducer and put action', assert => {
-  const timEmailArray = [ 'tim', 'email', 'lk4' ]
-  const timEmailObject = { id: timEmailArray }
+test('reducer and put action', t => {
+  const subject = { id: 'tim', type: 'Person' }
+  const predicate = 'email'
+  const object = { id: 'lk4', type: 'email', value: 'tim@example.com' }
+  const triple = { subject, predicate, object }
+  const savedTriple = {
+    id: [ 'tim', 'email', 'lk4' ],
+    subject,
+    predicate,
+    object: { id: 'lk4', type: 'email' },
+  }
   const expected = {
-    spo: { tim: { email: { lk4: { id: [ 'tim', 'email', 'lk4' ] } } } },
+    spo: { tim: { email: { lk4: savedTriple } } },
     sop: { tim: { lk4: { email: true } } },
     osp: { lk4: { tim: { email: true } } },
     ops: { lk4: { email: { tim: true } } },
     pos: { email: { lk4: { tim: true } } },
     pso: { email: { tim: { lk4: true } } },
   }
-  const result = reducer(undefined, triplePut(timEmailObject))
-  assert.deepEquals(result.triple, expected, 'result matches expected')
-  const result2 = reducer(undefined, triplePut(timEmailObject))
-  assert.deepEquals(result2.triple, expected, 'result2 matches expected')
-  assert.end()
+  const result = reducer(undefined, triplePut(triple))
+  t.deepEquals(keys(result), [ 'entity', 'triple' ], 'state has entity and triple')
+  t.deepEquals(keys(result.triple), keys(expected), 'keys match')
+  t.deepEquals(result.triple.spo, expected.spo, 'spo matches')
+  t.deepEquals(result.triple.sop, expected.sop, 'sop matches')
+  t.deepEquals(result.triple.osp, expected.osp, 'osp matches')
+  t.deepEquals(result.triple.ops, expected.ops, 'ops matches')
+  t.deepEquals(result.triple.pos, expected.pos, 'pos matches')
+  t.deepEquals(result.triple.pso, expected.pso, 'pso matches')
+  t.end()
 })
 
 test('getSXX selector', assert => {

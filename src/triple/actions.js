@@ -3,7 +3,7 @@ import map from 'lodash/map'
 import pick from 'lodash/pick'
 
 import createAction from '../createAction'
-import { tripleValidate } from './helpers'
+import { isTriple } from './helpers'
 
 export const DEL = 'graph/triple/DEL'
 export const del = createAction(DEL)
@@ -16,7 +16,7 @@ export function pickFields(item) {
 }
 // triple object, subject must have id fields.
 export function buildTriple(triple) {
-  tripleValidate(triple, true)
+  isTriple(triple, true)
   return {
     ...triple,
     id: getId(triple),

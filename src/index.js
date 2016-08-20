@@ -1,8 +1,11 @@
 import { combineReducers } from 'redux'
+import entity from './entity/reducer'
+import triple from './triple/reducer'
 
 export { create, createTriple } from './helpers'
+export { isEntity } from './entity/helpers'
+export { isTriple } from './triple/helpers'
 
-import entity from './entity/reducer'
 export {
   del as entityDel,
   put as entityPut,
@@ -11,7 +14,6 @@ export {
   UPDATE as ENTITY_UPDATE,
 } from './entity/actions'
 
-import triple from './triple/reducer'
 export {
   del as tripleDel,
   put as triplePut,
