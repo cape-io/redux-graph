@@ -1,13 +1,16 @@
 ## [1.2.0]
 > 2016-08-20
 
+Added several helper functions.
+
 * `create()` will create required triples and objects.
 * `createIfNew()` will dispatch new entity if it doesn't have an id field.
 * `createTriple()` will dispatch new entities and triples.
 * `nextId()` generate a new random key. Probably unique.
 * `isEntity()` is the object an entity.
-* `isEntityCreated()` does the entity have an id field. Might include check for dateCreated.
+* `isEntityCreated()` does the entity have an id field. Second arg to check dateCreated prop.
 * `isTriple()` validate triple object.
+* `insertFields()` add fields (id and dateCreate) required for save.
 
 ## [1.1.0]
 > 2016-07-26

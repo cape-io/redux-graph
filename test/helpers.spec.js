@@ -1,6 +1,6 @@
 import test from 'tape'
 
-import { create, createIfNew, isEntity, isEntityCreated, isTriple } from '../src'
+import { create, createIfNew, insertFields, isEntity, isEntityCreated, isTriple } from '../src'
 
 const mainEntity = { id: 'pBlf', type: 'DataFeed' }
 const creator = {
@@ -44,14 +44,31 @@ const expectedActions = [
   },
 ]
 test('isEntityCreated', t => {
-  t.ok(isEntityCreated(creator), 'created')
-  t.false(isEntityCreated({ type: 'Person' }), 'not created')
+  t.false(isEntityCreated(creator, true), 'not created if missing date.')
+  t.false(isEntityCreated({ type: 'Person' }), 'not created.')
+  t.false(isEntityCreated({ id: 'abc' }), 'missing type not created.')
+  t.ok(isEntityCreated(creator), 'entity has props required for creation.')
+  t.end()
+})
+test('insertFields', t => {
+  const item1 = insertFields(mainEntity)
+  t.ok(isEntityCreated(item1, true), 'has dateCreated field added.')
+  t.notEqual(item1, mainEntity, 'new obj created when fields added.')
+  t.equal(mainEntity.id, item1.id, 'left id the same.')
+  const now = new Date()
+  mainEntity.dateCreated = now
+  t.ok(isEntityCreated(mainEntity, true), 'sanity check that our proto is created.')
+  t.equal(insertFields(mainEntity), mainEntity, 'insertFields returns orig if created.')
+  delete item1.id
+  const item2 = insertFields(item1)
+  t.ok(isEntityCreated(item2, true), 'created correctly.')
+  t.equal(item1.dateCreated, item2.dateCreated, 'dateCreated left the same if included.')
   t.end()
 })
 test('createIfNew', t => {
   function dispatchFail() { t.fail('created entity should not dispatch.') }
-  const created = { id: 'abc' }
-  t.equal(createIfNew(dispatchFail, created), created, 'return if created')
+  const created = { id: 'abc', type: 'CreativeWork' }
+  t.equal(createIfNew(dispatchFail, created), created, 'return if created.')
   let createdItem = null
   function dispatchOk(action) {
     t.equal(action.type, 'graph/entity/PUT', 'action type')
