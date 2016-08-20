@@ -8,7 +8,7 @@ export function nextId() {
   return Math.random().toString(36).substr(6)
   .substring(1, 9)
 }
-// Check to see if object has required fields.
+// Check to see if object has required fields to be an entity.
 export function isEntity(value) {
   return isPlainObject(value) && isString(value.type)
 }

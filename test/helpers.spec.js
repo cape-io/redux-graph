@@ -43,6 +43,11 @@ const expectedActions = [
     },
   },
 ]
+test('isEntity', t => {
+  t.ok(isEntity(mainEntity), 'mainEntity is entity.')
+  t.false(isEntity({ id: 'abc' }), 'object with no type is not an entity.')
+  t.end()
+})
 test('isEntityCreated', t => {
   t.false(isEntityCreated(creator, true), 'not created if missing date.')
   t.false(isEntityCreated({ type: 'Person' }), 'not created.')
