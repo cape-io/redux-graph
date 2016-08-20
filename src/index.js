@@ -2,8 +2,8 @@ import { combineReducers } from 'redux'
 import entity from './entity/reducer'
 import triple from './triple/reducer'
 
-export { create, createTriple } from './helpers'
-export { isEntity } from './entity/helpers'
+export { create, createIfNew, createTriple } from './helpers'
+export { isEntity, isEntityCreated } from './entity/helpers'
 export { isTriple } from './triple/helpers'
 
 export {

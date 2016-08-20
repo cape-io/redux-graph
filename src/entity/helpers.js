@@ -1,3 +1,4 @@
+// import isDate from 'lodash/isDate'
 import isEmpty from 'lodash/isEmpty'
 import isPlainObject from 'lodash/isPlainObject'
 import isString from 'lodash/isString'
@@ -19,4 +20,5 @@ export function isEntity(value) {
 
 export function isEntityCreated(entity) {
   return !isEmpty(entity.id)
+  // && isDate(entity.dateCreated)
 }

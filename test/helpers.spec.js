@@ -1,6 +1,6 @@
 import test from 'tape'
 
-import { create, isEntity, isTriple } from '../src'
+import { create, createIfNew, isEntity, isEntityCreated, isTriple } from '../src'
 
 const mainEntity = { id: 'pBlf', type: 'DataFeed' }
 const creator = {
@@ -43,6 +43,25 @@ const expectedActions = [
     },
   },
 ]
+test('isEntityCreated', t => {
+  t.ok(isEntityCreated(creator), 'created')
+  t.false(isEntityCreated({ type: 'Person' }), 'not created')
+  t.end()
+})
+test('createIfNew', t => {
+  function dispatchFail() { t.fail('created entity should not dispatch.') }
+  const created = { id: 'abc' }
+  t.equal(createIfNew(dispatchFail, created), created, 'return if created')
+  let createdItem = null
+  function dispatchOk(action) {
+    t.equal(action.type, 'graph/entity/PUT', 'action type')
+    t.ok(isEntityCreated(action.payload), 'entity created')
+    createdItem = action.payload
+  }
+  const item = createIfNew(dispatchOk, { type: 'Person' })
+  t.deepEqual(item, createdItem, 'item returned')
+  t.end()
+})
 test('create()', t => {
   let subject = null
   function dispatch(action) {
