@@ -54,7 +54,8 @@ test('insertFields', t => {
   const item1 = insertFields(mainEntity)
   t.ok(isEntityCreated(item1, true), 'has dateCreated field added.')
   t.notEqual(item1, mainEntity, 'new obj created when fields added.')
-  t.equal(mainEntity.id, item1.id, 'left id the same.')
+  t.equal(item1.id, mainEntity.id, 'left id the same.')
+  t.equal(item1.type, mainEntity.type, 'type left the same.')
   const now = new Date()
   mainEntity.dateCreated = now
   t.ok(isEntityCreated(mainEntity, true), 'sanity check that our proto is created.')
@@ -63,6 +64,11 @@ test('insertFields', t => {
   const item2 = insertFields(item1)
   t.ok(isEntityCreated(item2, true), 'created correctly.')
   t.equal(item1.dateCreated, item2.dateCreated, 'dateCreated left the same if included.')
+  delete item2.type
+  const item3 = insertFields(item2)
+  t.equal(item3.type, 'Thing', 'default type is Thing.')
+  t.equal(item2.id, item3.id, 'id is left the same.')
+  t.ok(isEntityCreated(item3, true), 'created correctly.')
   t.end()
 })
 test('createIfNew', t => {
