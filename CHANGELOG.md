@@ -1,3 +1,9 @@
+## [1.2.1]
+This is prep for version 2 where there will each entity will be stored in its own type index.
+
+* `selectTypeIndex(state)` returns object keyed by entity type property.
+* `entityTypeSelector(typeId)(state)` selector creator returns selector that will return only entity type specified.
+
 ## [1.2.0]
 > 2016-08-20
 
