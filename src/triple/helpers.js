@@ -1,9 +1,12 @@
 import isArray from 'lodash/isArray'
+import isPlainObject from 'lodash/isPlainObject'
 import isString from 'lodash/isString'
 
 import { isEntity, isEntityCreated } from '../entity/helpers'
 
-export function isTriple({ id, subject, predicate, object }, checkCreated = false) {
+export function isTriple(triple, checkCreated = false) {
+  const { id, subject, predicate, object } = triple
+  if (!isPlainObject(triple)) throw new Error('Triple must be an object.')
   if (!isEntity(subject)) throw new Error('Triple must include subject object.')
   if (!isString(predicate)) throw new Error('Predicate must be a string.')
   if (!isEntity(object)) throw new Error('Triple must include object prop.')
