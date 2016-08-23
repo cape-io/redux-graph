@@ -29,3 +29,4 @@ export function insertFields(data) {
     type: data.type || 'Thing',
   }
 }
+export function uniqEntity(type) { return insertFields({ type }) }
