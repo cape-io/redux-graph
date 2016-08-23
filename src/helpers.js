@@ -1,3 +1,4 @@
+import isFunction from 'lodash/isFunction'
 import reduce from 'lodash/reduce'
 import set from 'lodash/set'
 
@@ -7,6 +8,7 @@ import { isTriple } from './triple/helpers'
 
 // Dispatch new entity if it doesn't have an id field. Otherwise returns entity.
 export function createIfNew(dispatch, entity) {
+  if (!isFunction(dispatch)) throw new Error('First argument must be dispatch func.')
   if (isEntityCreated(entity)) return entity
   const item = insertFields(entity)
   create(dispatch, item) // eslint-disable-line no-use-before-define
