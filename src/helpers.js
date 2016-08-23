@@ -8,7 +8,7 @@ import { isTriple } from './triple/helpers'
 
 // Dispatch new entity if it doesn't have an id field. Otherwise returns entity.
 export function createIfNew(dispatch, entity) {
-  if (!isFunction(dispatch)) throw new Error('First argument must be dispatch func.')
+  if (!isFunction(dispatch)) throw new Error('First createIfNew argument must be dispatch func.')
   if (isEntityCreated(entity)) return entity
   const item = insertFields(entity)
   create(dispatch, item) // eslint-disable-line no-use-before-define
@@ -17,6 +17,7 @@ export function createIfNew(dispatch, entity) {
 
 // Dispatch new entities and triples.
 export function createTriple(dispatch, triple) {
+  if (!isFunction(dispatch)) throw new Error('First createTriple argument must be dispatch func.')
   isTriple(triple)
   const subject = createIfNew(dispatch, triple.subject)
   const object = createIfNew(dispatch, triple.object)
