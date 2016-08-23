@@ -11,8 +11,7 @@ export function createIfNew(dispatch, entity) {
   if (!isFunction(dispatch)) throw new Error('First createIfNew argument must be dispatch func.')
   if (isEntityCreated(entity)) return entity
   const item = insertFields(entity)
-  create(dispatch, item) // eslint-disable-line no-use-before-define
-  return item
+  return create(dispatch, item) // eslint-disable-line no-use-before-define
 }
 
 // Dispatch new entities and triples.
@@ -42,4 +41,5 @@ export function create(dispatch, entity) {
   const subject = entity.id ? entity : insertFields(entity)
   const item = reduce(subject, propHandler(dispatch, subject), {})
   dispatch(entityPut(item))
+  return item
 }
