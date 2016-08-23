@@ -1,8 +1,8 @@
-## [1.2.3]
+## [1.3.0]
 
+* Added `entityHasType(typeId, entity)` curried function to check is valid entity with certain type.
 * Improve validation of `isTriple` to check for plain object first.
 * Now throwing error if first  arg is not a function on `createIfNew(dispatch, entity)` and `createTriple`.
-* `entityHasType(typeId, entity)` curried function to check is valid entity with certain type.
 * `createIfNew` and `create` now return reduced entity where triple object fields are removed.
 
 ## [1.2.1]
