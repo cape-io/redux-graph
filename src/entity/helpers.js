@@ -1,3 +1,4 @@
+import curry from 'lodash/curry'
 import isDate from 'lodash/isDate'
 import isEmpty from 'lodash/isEmpty'
 import isPlainObject from 'lodash/isPlainObject'
@@ -12,6 +13,9 @@ export function nextId() {
 export function isEntity(value) {
   return isPlainObject(value) && isString(value.type)
 }
+export const entityHasType = curry((typeId, entity) =>
+  isEntity(entity) && typeId === entity.type
+)
 
 // Check to see if the entity has been populated with fields required for save.
 export function isEntityCreated(entity, checkDate = false) {
