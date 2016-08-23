@@ -1,6 +1,6 @@
 import test from 'tape'
 
-import { entityHasType, isEntity } from '../../src/entity/helpers'
+import { entityHasType, isEntity } from '../../src'
 
 test('isEntity', t => {
   t.false(isEntity(), 'undefined')
