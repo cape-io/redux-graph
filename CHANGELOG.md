@@ -1,5 +1,12 @@
+## [1.2.3]
+
+* Improve validation of `isTriple` to check for plain object first.
+* Now throwing error if first  arg is not a function on `createIfNew(dispatch, entity)` and `createTriple`.
+* `entityHasType(typeId, entity)` curried function to check is valid entity with certain type.
+* `createIfNew` and `create` now return reduced entity where triple object fields are removed.
+
 ## [1.2.1]
-This is prep for version 2 where there will each entity will be stored in its own type index.
+This is prep for version 2 where each entity will be stored in its own type index.
 
 * `selectTypeIndex(state)` returns object keyed by entity type property.
 * `entityTypeSelector(typeId)(state)` selector creator returns selector that will return only entity type specified.
