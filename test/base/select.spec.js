@@ -1,8 +1,8 @@
 import test from 'tape'
 import { keys } from 'lodash'
 
-import { entityTypeSelector, selectTypeIndex } from '../src'
-import state from './mock'
+import { entityTypeSelector, selectTypeIndex } from '../../src'
+import state from '../mock'
 
 test('selectTypeIndex', t => {
   const typeIndex = selectTypeIndex(state)

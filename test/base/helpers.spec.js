@@ -1,6 +1,6 @@
 import test from 'tape'
 
-import { create, createIfNew, insertFields, isEntity, isEntityCreated, isTriple } from '../src'
+import { create, createIfNew, insertFields, isEntity, isEntityCreated, isTriple } from '../../src'
 
 const mainEntity = { id: 'pBlf', type: 'DataFeed' }
 const creator = {

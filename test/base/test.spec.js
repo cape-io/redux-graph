@@ -1,8 +1,8 @@
 import test from 'tape'
 import { keys } from 'lodash'
 
-import { getSXX } from '../src/triple/select'
-import reducer, { triplePut, entityUpdate } from '../src/index'
+import { getSXX } from '../../src/triple/select'
+import reducer, { triplePut, entityUpdate } from '../../src/index'
 
 const tripleState = {
   spo: {
