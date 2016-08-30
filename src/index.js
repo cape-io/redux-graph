@@ -4,7 +4,7 @@ import triple from './triple/reducer'
 
 export { create, createIfNew, createTriple, splitEntity } from './helpers'
 export { entityHasType, insertFields, isEntity, isEntityCreated, nextId } from './entity/helpers'
-export { isTriple } from './triple/helpers'
+export * from './triple/helpers'
 
 export {
   del as entityDel,

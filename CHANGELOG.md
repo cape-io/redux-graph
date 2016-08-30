@@ -1,3 +1,8 @@
+## [1.4.0]
+
+* Added `buildTypeIndex(entities)`. Returns object grouped by type and then keyed by id.
+* Added  `tripleTypeIndexSelector(selector)` is a selector builder that will return a typeIndex.
+
 ## [1.3.1]
 
 * Cleanup of `create(dispatch, entity)` that will add add subject first before `createTriple`.

@@ -30,10 +30,13 @@ export function filterEntityFirst(predicate) {
 export function groupByType(result, entity, key) {
   return set(result, [ entity.type, key ], entity)
 }
+export function buildTypeIndex(entities) {
+  return reduce(entities, groupByType, {})
+}
 // Entity keyed by type.
 export const selectTypeIndex = createSelector(
   entitySelector,
-  entities => reduce(entities, groupByType, {})
+  buildTypeIndex
 )
 export const selectEntityType = createSelector(
   selectTypeIndex,

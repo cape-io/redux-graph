@@ -11,7 +11,10 @@ addEntity('b1', 'bar')
 addEntity('c1', 'bar')
 addEntity('d1', 'bar')
 
-export const agent = { id: "user0","type":"Person","name":"Anonymous","dateCreated":"2016-08-30T17:25:25.915Z" }
+export const agent = {
+  id: "user0",
+  type: "Person","name":"Anonymous","dateCreated":"2016-08-30T17:25:25.915Z",
+}
 export const item = {
   approxWidth: '57"',
   category: 'textile',
