@@ -1,3 +1,8 @@
+## [1.3.1]
+
+* Cleanup of `create(dispatch, entity)` that will add add subject first before `createTriple`.
+* Added `splitEntity()` that will return `{ subject, triples }`.
+
 ## [1.3.0]
 
 * Added `entityHasType(typeId, entity)` curried function to check is valid entity with certain type.

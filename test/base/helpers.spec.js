@@ -1,6 +1,9 @@
 import test from 'tape'
+import { forEach, isArray, isObject } from 'lodash'
 
-import { create, createIfNew, insertFields, isEntity, isEntityCreated, isTriple } from '../../src'
+import {
+  create, createIfNew, insertFields, isEntity, isEntityCreated, isTriple, splitEntity,
+} from '../../src'
 
 const mainEntity = { id: 'pBlf', type: 'DataFeed' }
 const creator = {
@@ -16,33 +19,6 @@ const collection = {
   title,
   type: 'CollectionList',
 }
-const expectedActions = [
-  {
-    type: 'graph/triple/PUT',
-    payload: {
-      predicate: 'creator',
-      subject: { id: '0tl6uma3', type: 'CollectionList' },
-      object: { id: 'user0', type: 'Person' },
-      id: [ '0tl6uma3', 'creator', 'user0' ] },
-  },
-  {
-    type: 'graph/triple/PUT',
-    payload: {
-      predicate: 'mainEntity',
-      subject: { id: '0tl6uma3', type: 'CollectionList' },
-      object: { id: 'pBlf', type: 'DataFeed' },
-      id: [ '0tl6uma3', 'mainEntity', 'pBlf' ],
-    },
-  },
-  {
-    type: 'graph/entity/PUT',
-    payload: {
-      itemListOrder: 'Ascending',
-      title: 'Favorites',
-      type: 'CollectionList',
-    },
-  },
-]
 test('isEntity', t => {
   t.ok(isEntity(mainEntity), 'mainEntity is entity.')
   t.false(isEntity({ id: 'abc' }), 'object with no type is not an entity.')
@@ -90,27 +66,73 @@ test('createIfNew', t => {
   t.deepEqual(item, createdItem, 'item returned')
   t.end()
 })
+const subject = {
+  itemListOrder: 'Ascending',
+  title: 'Favorites',
+  type: 'CollectionList',
+}
+const triples = [
+  {
+    predicate: 'creator',
+    subject: { id: '0tl6uma3', type: 'CollectionList' },
+    object: { id: 'user0', type: 'Person' },
+    id: [ '0tl6uma3', 'creator', 'user0' ],
+  },
+  {
+    predicate: 'mainEntity',
+    subject: { id: '0tl6uma3', type: 'CollectionList' },
+    object: { id: 'pBlf', type: 'DataFeed' },
+    id: [ '0tl6uma3', 'mainEntity', 'pBlf' ],
+  },
+]
+function shouldMatch(t, res, lookFor) {
+  forEach(lookFor, (val, key) => t.equal(res[key], val, key))
+}
+test('splitEntity', t => {
+  const split = splitEntity(collection)
+  t.ok(isObject(split), 'split is object')
+  t.ok(isObject(split.subject), 'subject is object')
+  t.ok(isArray(split.triples), 'triples is array')
+  shouldMatch(t, split.subject, subject)
+  t.equal(split.triples.length, 2, 'triples len 2')
+  t.equal(split.triples[0].subject, split.subject)
+  t.equal(split.triples[0].predicate, 'creator')
+  t.equal(split.triples[0].object, creator)
+  t.equal(split.triples[1].subject, split.subject)
+  t.equal(split.triples[1].predicate, 'mainEntity')
+  t.equal(split.triples[1].object, mainEntity)
+  const split2 = splitEntity({})
+  t.ok(isObject(split2.subject))
+  t.equal(split2.triples.length, 0)
+  t.end()
+})
+const expectedActions = [
+  {
+    type: 'graph/entity/PUT',
+    payload: subject,
+  },
+  {
+    type: 'graph/triple/PUT',
+    payload: triples[0],
+  },
+  {
+    type: 'graph/triple/PUT',
+    payload: triples[1],
+  },
+]
+
 test('create()', t => {
-  let subject = null
+  t.plan(6)
   function dispatch(action) {
     // console.log(action)
     const expAct = expectedActions.shift()
     t.equal(action.type, expAct.type, 'type is the same')
     if (action.type === 'graph/triple/PUT') {
       t.ok(isTriple(action.payload, true), 'is triple')
-      if (!subject) {
-        subject = action.payload.subject
-      }
-      else {
-        t.deepEqual(action.payload.subject, subject, 'subject match')
-      }
     }
     else {
       t.ok(isEntity(action.payload), 'is entity')
-      t.equal(action.payload.id, subject.id, 'subject id')
-      t.equal(action.payload.type, subject.type, 'subj type')
     }
   }
   create(dispatch, collection)
-  t.end()
 })

@@ -1,6 +1,7 @@
+import forEach from 'lodash/forEach'
 import isFunction from 'lodash/isFunction'
 import reduce from 'lodash/reduce'
-import set from 'lodash/set'
+import omitBy from 'lodash/omitBy'
 
 import { insertFields, isEntity, isEntityCreated } from './entity/helpers'
 import { entityPut, triplePut } from './'
@@ -10,8 +11,7 @@ import { isTriple } from './triple/helpers'
 export function createIfNew(dispatch, entity) {
   if (!isFunction(dispatch)) throw new Error('First createIfNew argument must be dispatch func.')
   if (isEntityCreated(entity)) return entity
-  const item = insertFields(entity)
-  return create(dispatch, item) // eslint-disable-line no-use-before-define
+  return create(dispatch, entity) // eslint-disable-line no-use-before-define
 }
 
 // Dispatch new entities and triples.
@@ -25,21 +25,34 @@ export function createTriple(dispatch, triple) {
   return tripleWithIds
 }
 
-export function propHandler(dispatch, subject) {
+export function getTriples(subject) {
   return (res, val, predicate) => {
     if (isEntity(val)) {
-      createTriple(dispatch, { predicate, subject, object: val })
-      return res
+      const triple = { predicate, subject, object: val }
+      return res.concat(triple)
     }
-    return set(res, predicate, val)
+    // @TODO Handle array values.
+    return res
   }
+}
+export function getFields(entity) {
+  return omitBy(entity, isEntity)
+}
+// Split an entity into its database parts. Subject and its triples.
+export function splitEntity(item) {
+  // Create an id for the new entity.
+  const entity = insertFields(item)
+  // Clear out any entity ref fields.
+  const subject = getFields(entity)
+  // Build out triples.
+  const triples = reduce(entity, getTriples(subject), [])
+  return { subject, triples }
 }
 
 // Create triples and dispatch required actions.
 export function create(dispatch, entity) {
-  // Create an id for the new entity.
-  const subject = entity.id ? entity : insertFields(entity)
-  const item = reduce(subject, propHandler(dispatch, subject), {})
-  dispatch(entityPut(item))
-  return item
+  const { subject, triples } = splitEntity(entity)
+  dispatch(entityPut(subject))
+  forEach(triples, triple => createTriple(dispatch, triple))
+  return subject
 }

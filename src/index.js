@@ -2,7 +2,7 @@ import { combineReducers } from 'redux'
 import entity from './entity/reducer'
 import triple from './triple/reducer'
 
-export { create, createIfNew, createTriple } from './helpers'
+export { create, createIfNew, createTriple, splitEntity } from './helpers'
 export { entityHasType, insertFields, isEntity, isEntityCreated, nextId } from './entity/helpers'
 export { isTriple } from './triple/helpers'
 
