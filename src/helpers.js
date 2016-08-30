@@ -25,7 +25,7 @@ export function createTriple(dispatch, triple) {
   return tripleWithIds
 }
 
-export function getTriples(subject) {
+export function buildTriples(subject) {
   return (res, val, predicate) => {
     if (isEntity(val)) {
       const triple = { predicate, subject, object: val }
@@ -45,7 +45,7 @@ export function splitEntity(item) {
   // Clear out any entity ref fields.
   const subject = getFields(entity)
   // Build out triples.
-  const triples = reduce(entity, getTriples(subject), [])
+  const triples = reduce(entity, buildTriples(subject), [])
   return { subject, triples }
 }
 
