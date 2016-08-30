@@ -1,11 +1,14 @@
+import immutable from 'seamless-immutable'
+
 import forEach from 'lodash/forEach'
 import get from 'lodash/get'
 import isFunction from 'lodash/isFunction'
-import set from 'lodash/set'
 
 import { DEL, PUT, PUT_ALL } from './actions'
 
-const defaultState = { spo: {}, sop: {}, osp: {}, ops: {}, pos: {}, pso: {} }
+const defaultState = immutable({
+  spo: {}, sop: {}, osp: {}, ops: {}, pos: {}, pso: {},
+})
 
 function del(state, triple) {
   const [ sub, pred, obj ] = triple
@@ -13,27 +16,26 @@ function del(state, triple) {
   const isValid = get(state.spo, [ sub, pred, obj ], false)
   if (isValid) {
     // @TODO Cleanup the tree if it's without a third level.
-    delete this.spo[sub][pred][obj]
-    delete this.sop[sub][obj][pred]
-    delete this.pso[pred][sub][obj]
-    delete this.pos[pred][obj][sub]
-    delete this.osp[obj][sub][pred]
-    delete this.ops[obj][pred][sub]
+    return state.without([ 'spo', sub, pred, obj ])
+    .without([ 'sop', sub, obj, pred ])
+    .without([ 'osp', obj, sub, pred ])
+    .without([ 'ops', obj, pred, sub ])
+    .without([ 'pos', pred, obj, sub ])
+    .without([ 'pso', pred, sub, obj ])
   }
-  return { ...state }
+  return state
 }
 
 function put(state, triple) {
   const [ sub, pred, obj ] = triple.id
   // Store the full triple obj on the spo.
-  set(state.spo, [ sub, pred, obj ], triple)
+  return state.setIn([ 'spo', sub, pred, obj ], triple)
   // Everything else is just an index.
-  set(state.sop, [ sub, obj, pred ], true)
-  set(state.osp, [ obj, sub, pred ], true)
-  set(state.ops, [ obj, pred, sub ], true)
-  set(state.pos, [ pred, obj, sub ], true)
-  set(state.pso, [ pred, sub, obj ], true)
-  return { ...state }
+  .setIn([ 'sop', sub, obj, pred ], true)
+  .setIn([ 'osp', obj, sub, pred ], true)
+  .setIn([ 'ops', obj, pred, sub ], true)
+  .setIn([ 'pos', pred, obj, sub ], true)
+  .setIn([ 'pso', pred, sub, obj ], true)
 }
 
 function putAll(state, triples) {
