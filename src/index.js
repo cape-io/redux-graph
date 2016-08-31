@@ -2,7 +2,7 @@ import { combineReducers } from 'redux'
 import entity from './entity/reducer'
 import triple from './triple/reducer'
 
-export { create, createIfNew, createTriple, splitEntity } from './helpers'
+export * from './helpers'
 export { entityHasType, insertFields, isEntity, isEntityCreated, nextId } from './entity/helpers'
 export * from './triple/helpers'
 
@@ -23,6 +23,7 @@ export {
 export * from './select'
 export * from './entity/select'
 export * from './triple/select'
+export { getIndex, getIndexPath } from './triple/selectNew'
 
 export default combineReducers({
   entity,
