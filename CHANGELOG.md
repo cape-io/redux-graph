@@ -1,3 +1,8 @@
+## [1.4.1]
+
+* Fixed bug in reducer where objects were mutated instead of re-created.
+* Added `rebuildEntity()`
+
 ## [1.4.0]
 
 * Added `buildTypeIndex(entities)`. Returns object grouped by type and then keyed by id.
