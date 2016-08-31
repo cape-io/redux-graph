@@ -1,11 +1,12 @@
+import { createSelector } from 'reselect'
 import forEach from 'lodash/forEach'
 import isFunction from 'lodash/isFunction'
+import mapValues from 'lodash/mapValues'
 import reduce from 'lodash/reduce'
 import omitBy from 'lodash/omitBy'
 
 import { insertFields, isEntity, isEntityCreated } from './entity/helpers'
-import { entityPut, triplePut } from './'
-import { isTriple } from './triple/helpers'
+import { entityPut, entitySelector, getIndex, isTriple, triplePut } from './'
 
 // Dispatch new entity if it doesn't have an id field. Otherwise returns entity.
 export function createIfNew(dispatch, entity) {
@@ -55,4 +56,18 @@ export function create(dispatch, entity) {
   dispatch(entityPut(subject))
   forEach(triples, triple => createTriple(dispatch, triple))
   return subject
+}
+export function entityPredicates(entity, spo, id) {
+  return mapValues(spo[id], (objectIds) =>
+    mapValues(objectIds, (trip, objId) =>
+      rebuildEntity(entity, spo, objId) // eslint-disable-line no-use-before-define
+    )
+  )
+}
+export function rebuildEntity(entity, spo, id) {
+  if (!spo[id]) return entity[id]
+  return entity[id].merge(entityPredicates(entity, spo, id))
+}
+export function rebuildEntitySelector(entityIdSelector) {
+  return createSelector(entitySelector, getIndex.spo, entityIdSelector, rebuildEntity)
 }
