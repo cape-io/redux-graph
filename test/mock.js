@@ -13,7 +13,9 @@ addEntity('d1', 'bar')
 
 export const agent = {
   id: "user0",
-  type: "Person","name":"Anonymous","dateCreated":"2016-08-30T17:25:25.915Z",
+  type: "Person",
+  "name":"Anonymous",
+  "dateCreated":"2016-08-30T17:25:25.915Z",
 }
 export const item = {
   approxWidth: '57"',
@@ -40,6 +42,24 @@ export const trouble = {
     actionStatus:"created",
     agent,
     item,
-    "position":100,"startTime":"2016-08-30T17:41:43.233Z","type":"ListItem"}}
+    "position":100,
+    "startTime":"2016-08-30T17:41:43.233Z",
+    "type":"ListItem",
+  }
+}
+export const mainEntity = { id: 'pBlf', type: 'DataFeed' }
+export const creator = {
+  id: 'user0',
+  type: 'Person',
+  name: 'Anonymous Person or User of the website',
+}
+export const title = 'Favorites'
+export const collection = {
+  creator, // User that created the thing.
+  itemListOrder: 'Ascending',
+  mainEntity, // List of what.
+  title,
+  type: 'CollectionList',
+}
 
 export default state
