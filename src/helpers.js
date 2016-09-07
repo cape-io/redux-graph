@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect'
 import forEach from 'lodash/forEach'
 import isFunction from 'lodash/isFunction'
+import keys from 'lodash/keys'
 import mapValues from 'lodash/mapValues'
 import reduce from 'lodash/reduce'
 import omitBy from 'lodash/omitBy'
@@ -71,3 +72,19 @@ export function rebuildEntity(entity, spo, id) {
 export function rebuildEntitySelector(entityIdSelector) {
   return createSelector(entitySelector, getIndex.spo, entityIdSelector, rebuildEntity)
 }
+export function entityDomains(entity, ops, id) {
+  return mapValues(ops[id], predicate =>
+    mapValues(predicate, (trip, domainId) =>
+      getDomainIncludes(entity, ops, domainId) // eslint-disable-line no-use-before-define
+    )
+  )
+}
+export function getDomainIncludes(entity, ops, id) {
+  if (!ops[id]) return entity[id]
+  return entity[id].set('domainIncludes', entityDomains(entity, ops, id))
+}
+export function entityDomainIncludes(entityIdSelector) {
+  return createSelector(entitySelector, getIndex.ops, entityIdSelector, getDomainIncludes)
+}
+export function key0(obj) { return keys(obj)[0] }
+export function val0(obj) { return obj[key0(obj)] }

@@ -41,3 +41,5 @@ const store = createStore(reducer)
 * `isEntityCreated()` does the entity have an id field. Second arg to check dateCreated prop.
 * `isTriple()` validate triple object.
 * `insertFields()` add fields (id and dateCreate) required for save.
+* `rebuildEntity()` adds predicate fields and entity references back into a single object.
+* `entityDomainIncludes()` adds `domainIncludes` property to entity that includes entities that reference it.

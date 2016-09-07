@@ -1,3 +1,8 @@
+## [1.4.2]
+
+* Added `entityDomainIncludes(entityIdSelector)`. Basically the opposite of `rebuildEntity()`.
+* Added `key0` and `val0` to allow getting the first key or value of an object like array[0]. Obviously if the object has more than one key there is no promise of key order.
+
 ## [1.4.1]
 
 * Fixed bug in reducer where objects were mutated instead of re-created.
@@ -6,7 +11,7 @@
 ## [1.4.0]
 
 * Added `buildTypeIndex(entities)`. Returns object grouped by type and then keyed by id.
-* Added  `tripleTypeIndexSelector(selector)` is a selector builder that will return a typeIndex.
+* Added `tripleTypeIndexSelector(selector)` is a selector builder that will return a typeIndex.
 
 ## [1.3.1]
 

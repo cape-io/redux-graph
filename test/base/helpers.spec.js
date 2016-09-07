@@ -2,7 +2,7 @@ import test from 'tape'
 import { forEach, isArray, isObject } from 'lodash'
 
 import {
-  create, createIfNew, insertFields, isEntity, isEntityCreated, isTriple, splitEntity,
+  create, createIfNew, insertFields, isEntity, isEntityCreated, isTriple, key0, splitEntity, val0,
 } from '../../src'
 
 const mainEntity = { id: 'pBlf', type: 'DataFeed' }
@@ -135,4 +135,12 @@ test('create()', t => {
     }
   }
   create(dispatch, collection)
+})
+test('key0', t => {
+  t.equal(key0({ first: 'boo' }), 'first', 'find val of first key')
+  t.end()
+})
+test('val0', t => {
+  t.equal(val0({ foo: 'bar' }), 'bar')
+  t.end()
 })
