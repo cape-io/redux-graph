@@ -1,3 +1,7 @@
+## [1.4.3]
+
+* `rebuildEntitiesSelector()`. Same as `rebuildEntity` but takes an collection of entities.
+
 ## [1.4.2]
 
 * Added `entityDomainIncludes(entityIdSelector)`. Basically the opposite of `rebuildEntity()`.

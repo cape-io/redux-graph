@@ -2,6 +2,7 @@ import { createSelector } from 'reselect'
 import forEach from 'lodash/forEach'
 import isFunction from 'lodash/isFunction'
 import keys from 'lodash/keys'
+import map from 'lodash/map'
 import mapValues from 'lodash/mapValues'
 import reduce from 'lodash/reduce'
 import omitBy from 'lodash/omitBy'
@@ -71,6 +72,12 @@ export function rebuildEntity(entity, spo, id) {
 }
 export function rebuildEntitySelector(entityIdSelector) {
   return createSelector(entitySelector, getIndex.spo, entityIdSelector, rebuildEntity)
+}
+export function rebuildEntities(entity, spo, entities) {
+  return mapValues(entities, ({ id }) => rebuildEntity(entity, spo, id))
+}
+export function rebuildEntitiesSelector(entitiesSelector) {
+  return createSelector(entitySelector, getIndex.spo, entitiesSelector, rebuildEntities)
 }
 export function entityDomains(entity, ops, id) {
   return mapValues(ops[id], predicate =>

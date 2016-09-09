@@ -45,12 +45,12 @@ export const listItem = {
 }
 export const trouble = {
   subject: {
-    "additionalType":"Project",
-    "itemListOrder":"Ascending",
-    "title":"Favorites",
-    "type":"CollectionList",
-    "dateCreated":"2016-08-30T17:41:43.224Z",
-    "id":"i5dtxvjo",
+    additionalType: 'Project',
+    itemListOrder: 'Ascending',
+    title: 'Favorites',
+    type: 'CollectionList',
+    dateCreated: '2016-08-30T17:41:43.224Z',
+    id: 'i5dtxvjo',
   },
   predicate: 'itemListElement',
   object: listItem,
@@ -65,5 +65,5 @@ export const collection = {
   title,
   type: 'CollectionList',
 }
-
+export const collection2 = { ...collection, title: 'Kai' }
 export default state
