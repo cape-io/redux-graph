@@ -2,7 +2,6 @@ import { createSelector } from 'reselect'
 import forEach from 'lodash/forEach'
 import isFunction from 'lodash/isFunction'
 import keys from 'lodash/keys'
-import map from 'lodash/map'
 import mapValues from 'lodash/mapValues'
 import reduce from 'lodash/reduce'
 import omitBy from 'lodash/omitBy'
@@ -10,16 +9,20 @@ import omitBy from 'lodash/omitBy'
 import { insertFields, isEntity, isEntityCreated } from './entity/helpers'
 import { entityPut, entitySelector, getIndex, isTriple, triplePut } from './'
 
+export function isFunc(arg) {
+  if (!isFunction(arg)) throw new Error('First createIfNew argument must be dispatch func.')
+}
+
 // Dispatch new entity if it doesn't have an id field. Otherwise returns entity.
 export function createIfNew(dispatch, entity) {
-  if (!isFunction(dispatch)) throw new Error('First createIfNew argument must be dispatch func.')
+  isFunc(dispatch)
   if (isEntityCreated(entity)) return entity
   return create(dispatch, entity) // eslint-disable-line no-use-before-define
 }
 
 // Dispatch new entities and triples.
 export function createTriple(dispatch, triple) {
-  if (!isFunction(dispatch)) throw new Error('First createTriple argument must be dispatch func.')
+  isFunc(dispatch)
   isTriple(triple)
   const subject = createIfNew(dispatch, triple.subject)
   const object = createIfNew(dispatch, triple.object)
@@ -54,6 +57,7 @@ export function splitEntity(item) {
 
 // Create triples and dispatch required actions.
 export function create(dispatch, entity) {
+  isFunc(dispatch)
   const { subject, triples } = splitEntity(entity)
   dispatch(entityPut(subject))
   forEach(triples, triple => createTriple(dispatch, triple))
