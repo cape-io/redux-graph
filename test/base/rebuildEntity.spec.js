@@ -5,7 +5,7 @@ import { forEach, get, size } from 'lodash'
 import graph, {
   create, createTriple, entityTypeSelector, isEntity,
   rebuildEntitySelector, rebuildEntitiesSelector,
-} from '../../src'
+} from '../../'
 import { collection, collection2, listItem } from '../mock'
 
 const { dispatch, getState } = createStore(combineReducers({ graph }))

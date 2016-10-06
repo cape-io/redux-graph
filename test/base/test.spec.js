@@ -38,7 +38,7 @@ test('reducer and put action', t => {
     pso: { email: { tim: { lk4: true } } },
   }
   const result = reducer(undefined, triplePut(triple))
-  t.deepEquals(keys(result), [ 'entity', 'triple' ], 'state has entity and triple')
+  t.deepEquals(keys(result), [ 'entity', 'triple', 'typeIndex' ], 'state has entity and triple')
   t.deepEquals(keys(result.triple), keys(expected), 'keys match')
   t.deepEquals(result.triple.spo, expected.spo, 'spo matches')
   t.deepEquals(result.triple.sop, expected.sop, 'sop matches')
