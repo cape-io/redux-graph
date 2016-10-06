@@ -1,7 +1,9 @@
 import test from 'tape'
 
 import reducer, { createTypeIndex, getPath, validEntity } from '../../src/entity/typeIndexReducer'
+import { entityPut } from '../../src/'
 import state from '../mock'
+
 const entity = state.graph.entity
 
 test('validEntity', (t) => {
@@ -19,5 +21,13 @@ test('getPath', (t) => {
 test('createTypeIndex', (t) => {
   const typeIndex = createTypeIndex(entity)
   t.deepEqual(typeIndex, state.graph.typeIndex)
+  t.end()
+})
+test('reducer', (t) => {
+  const st1 = reducer(undefined, entityPut(entity.a))
+  t.deepEqual(st1, { foo: { a: true } })
+  const st2 = reducer(st1, entityPut(entity.b))
+  t.deepEqual(st2, { foo: { a: true, b: true } })
+
   t.end()
 })
