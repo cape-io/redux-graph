@@ -1,8 +1,7 @@
 import isArray from 'lodash/isArray'
 import isObject from 'lodash/isObject'
 import keyBy from 'lodash/keyBy'
-
-import createAction from '../createAction'
+import { createAction } from 'cape-redux'
 
 export const DEL = 'graph/entity/DEL'
 export const del = createAction(DEL)

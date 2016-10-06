@@ -1,10 +1,12 @@
-import immutable from 'seamless-immutable'
-import isFunction from 'lodash/isFunction'
+import { createReducer } from 'cape-redux'
 
 import { DEL, PUT, PUT_ALL, UPDATE } from './actions'
 import { PUT as TRIPLE_PUT } from '../triple/actions'
 
-function putReducer(state, payload) { return state.set(payload.id, payload) }
+function putReducer(state, payload) {
+  if (!payload.id) throw new Error('putReducer requires payload.id')
+  return state.set(payload.id, payload)
+}
 function triplePut(state, { object }) {
   const { id } = object
   return state[id] ? state : putReducer(state, object)
@@ -22,10 +24,5 @@ const reducers = {
   [TRIPLE_PUT]: triplePut,
   [UPDATE]: update,
 }
-
-// Updates an entity cache in response to any action with response.entity.
-export default function reducer(state = {}, action) {
-  if (action.error || !action.type || !isFunction(reducers[action.type])) return state
-  const immutableState = state.asMutable ? state : immutable(state)
-  return reducers[action.type](immutableState, action.payload)
-}
+const reducer = createReducer(reducers, {}, { makeImmutable: true })
+export default reducer
