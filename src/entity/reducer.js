@@ -18,7 +18,7 @@ function update(state, payload) {
   return state.set(payload.id, payload)
 }
 const reducers = {
-  [DEL]: (state, payload) => state.without(payload),
+  [DEL]: (state, payload) => state.without(payload.id),
   [PUT]: putReducer,
   [PUT_ALL]: (state, payload) => state.merge(payload),
   [TRIPLE_PUT]: triplePut,

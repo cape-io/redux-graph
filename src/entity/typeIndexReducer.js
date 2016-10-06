@@ -28,7 +28,7 @@ export function putAllReducer(state, payload) {
 }
 
 const reducers = {
-  [DEL]: (state, payload) => state.without(payload),
+  [DEL]: (state, payload) => state.without(getPath(payload)),
   [PUT]: putReducer,
   [PUT_ALL]: putAllReducer,
   [TRIPLE_PUT]: triplePut,
