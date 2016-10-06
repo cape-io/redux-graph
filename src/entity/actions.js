@@ -1,10 +1,15 @@
 import isArray from 'lodash/isArray'
 import isObject from 'lodash/isObject'
+import isString from 'lodash/isString'
 import keyBy from 'lodash/keyBy'
-import { createAction } from 'cape-redux'
+import { createAction, createGetPayload } from 'cape-redux'
 
 export const DEL = 'graph/entity/DEL'
-export const del = createAction(DEL)
+export const delPayload = createGetPayload((entityOrId) => {
+  if (isString(entityOrId)) return { id: entityOrId }
+  return entityOrId
+})
+export const del = createAction(DEL, delPayload)
 
 export const PUT = 'graph/entity/PUT'
 export const put = createAction(PUT)
