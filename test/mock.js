@@ -10,6 +10,14 @@ addEntity('a1', 'bar')
 addEntity('b1', 'bar')
 addEntity('c1', 'bar')
 addEntity('d1', 'bar')
+state.graph.typeIndex = {
+  foo: {
+    a: true, b: true, c: true, d: true,
+  },
+  bar: {
+    a1: true, b1: true, c1: true, d1: true,
+  },
+}
 export const creator = {
   id: 'user0',
   type: 'Person',

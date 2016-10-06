@@ -97,5 +97,6 @@ export function getDomainIncludes(entity, ops, id) {
 export function entityDomainIncludes(entityIdSelector) {
   return createSelector(entitySelector, getIndex.ops, entityIdSelector, getDomainIncludes)
 }
+// Maybe just use _.find instead?
 export function key0(obj) { return keys(obj)[0] }
 export function val0(obj) { return obj[key0(obj)] }

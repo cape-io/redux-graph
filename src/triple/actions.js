@@ -2,7 +2,7 @@ import isArray from 'lodash/isArray'
 import map from 'lodash/map'
 import pick from 'lodash/pick'
 
-import createAction from '../createAction'
+import { createAction } from 'cape-redux'
 import { isTriple } from './helpers'
 
 export const DEL = 'graph/triple/DEL'

@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux'
 import entity from './entity/reducer'
 import triple from './triple/reducer'
+import typeIndex from './entity/typeIndexReducer'
 
 export * from './helpers'
 export { entityHasType, insertFields, isEntity, isEntityCreated, nextId } from './entity/helpers'
@@ -28,4 +29,5 @@ export { getIndex, getIndexPath } from './triple/selectNew'
 export default combineReducers({
   entity,
   triple,
+  typeIndex,
 })
