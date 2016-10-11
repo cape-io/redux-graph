@@ -1,24 +1,14 @@
 import test from 'tape'
-import { forEach, isArray, isObject } from 'lodash'
+import { constant, forEach, isArray, isObject, matches } from 'lodash'
 
 import {
-  create, createIfNew, insertFields, isEntity, isEntityCreated, isTriple, key0, splitEntity, val0,
+  create, createIfNew, insertFields, isEntity, isEntityCreated, isTriple, key0,
+  splitEntity, selectorCreate, val0,
 } from '../../src'
+import state, { collection, creator, mainEntity } from '../mock'
 
-const mainEntity = { id: 'pBlf', type: 'DataFeed' }
-const creator = {
-  id: 'user0',
-  type: 'Person',
-  name: 'Anonymous Person or User of the website',
-}
 const title = 'Favorites'
-const collection = {
-  creator, // User that created the thing.
-  itemListOrder: 'Ascending',
-  mainEntity, // List of what.
-  title,
-  type: 'CollectionList',
-}
+
 test('isEntity', t => {
   t.ok(isEntity(mainEntity), 'mainEntity is entity.')
   t.false(isEntity({ id: 'abc' }), 'object with no type is not an entity.')
@@ -106,7 +96,7 @@ test('splitEntity', t => {
   t.equal(split2.triples.length, 0)
   t.end()
 })
-const expectedActions = [
+const expectedActions = constant([
   {
     type: 'graph/entity/PUT',
     payload: subject,
@@ -119,13 +109,13 @@ const expectedActions = [
     type: 'graph/triple/PUT',
     payload: triples[1],
   },
-]
+])
 
 test('create()', t => {
   t.plan(6)
+  const expActs = expectedActions()
   function dispatch(action) {
-    // console.log(action)
-    const expAct = expectedActions.shift()
+    const expAct = expActs.shift()
     t.equal(action.type, expAct.type, 'type is the same')
     if (action.type === 'graph/triple/PUT') {
       t.ok(isTriple(action.payload, true), 'is triple')
@@ -135,6 +125,19 @@ test('create()', t => {
     }
   }
   create(dispatch, collection)
+})
+test('selectorCreate', (t) => {
+  t.plan(3)
+  function dispatch(action) {
+    t.equal(action.type, 'graph/entity/PUT', 'type is the same')
+    t.ok(matches(state.other)(action.payload))
+  }
+  function entityBuilder(passedState) {
+    t.equal(passedState, state, 'entityBuilder passed state')
+    return passedState.other
+  }
+  const getState = constant(state)
+  selectorCreate(entityBuilder)(dispatch, getState)
 })
 test('key0', t => {
   t.equal(key0({ first: 'boo' }), 'first', 'find val of first key')

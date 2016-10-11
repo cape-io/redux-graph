@@ -34,6 +34,7 @@ const store = createStore(reducer)
 ## Helper functions.
 
 * `create(dispatch, item)` will create required triples and objects.
+* `selectorCreate(selector)(dispatch, getState)` For when you need a thunk action to create entity based on selector.
 * `createIfNew()` will dispatch new entity if it doesn't have an id field.
 * `createTriple()` will dispatch new entities and triples.
 * `nextId()` generate a new random key. Probably unique.

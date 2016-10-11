@@ -1,11 +1,8 @@
 import { createSelector } from 'reselect'
-import forEach from 'lodash/forEach'
-import isFunction from 'lodash/isFunction'
-import keys from 'lodash/keys'
-import mapValues from 'lodash/mapValues'
-import reduce from 'lodash/reduce'
-import omitBy from 'lodash/omitBy'
-
+import {
+  flow, forEach, identity, isFunction, keys, mapValues, reduce, omitBy, overArgs, partial,
+} from 'lodash'
+import { invokeArg } from 'cape-lodash'
 import { insertFields, isEntity, isEntityCreated } from './entity/helpers'
 import { entityPut, entitySelector, getIndex, isTriple, triplePut } from './'
 
@@ -60,9 +57,14 @@ export function create(dispatch, entity) {
   isFunc(dispatch)
   const { subject, triples } = splitEntity(entity)
   dispatch(entityPut(subject))
-  forEach(triples, triple => createTriple(dispatch, triple))
+  forEach(triples, partial(createTriple, dispatch))
   return subject
 }
+export function selectorCreate(entityBuilder) {
+  // Expects thunk action signature (dispatch, getState).
+  return overArgs(create, [ identity, flow(invokeArg, entityBuilder) ])
+}
+
 export function entityPredicates(entity, spo, id) {
   return mapValues(spo[id], (objectIds) =>
     mapValues(objectIds, (trip, objId) =>

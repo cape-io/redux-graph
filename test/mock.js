@@ -1,4 +1,4 @@
-const state = { graph: { entity: {} } }
+const state = { graph: { entity: {} }, other: { foo: 'bar' } }
 function addEntity(id, type = 'foo') {
   state.graph.entity[id] = { id, type }
 }
