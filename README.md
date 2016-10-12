@@ -7,7 +7,7 @@ The triple `id` is in the format of `[ subjectId, predicate, objectId ]`.
 
 ## Reducer
 
-The reducer is default export.
+The reducer is default export. Uses `cape-redux.createReducer` internally.
 
 ```javascript
 import graph from 'redux-graph'

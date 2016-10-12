@@ -1,14 +1,12 @@
-import immutable from 'seamless-immutable'
-
+import { createReducer } from 'cape-redux'
 import forEach from 'lodash/forEach'
 import get from 'lodash/get'
-import isFunction from 'lodash/isFunction'
 
 import { DEL, PUT, PUT_ALL } from './actions'
 
-const defaultState = immutable({
+const defaultState = {
   spo: {}, sop: {}, osp: {}, ops: {}, pos: {}, pso: {},
-})
+}
 
 function del(state, triple) {
   const [ sub, pred, obj ] = triple
@@ -45,7 +43,5 @@ function putAll(state, triples) {
 
 const reducers = { [DEL]: del, [PUT]: put, [PUT_ALL]: putAll }
 
-export default function reducer(state = defaultState, action) {
-  if (action.error || !action.type || !isFunction(reducers[action.type])) return state
-  return reducers[action.type](state, action.payload)
-}
+const reducer = createReducer(reducers, defaultState, { makeImmutable: true })
+export default reducer
