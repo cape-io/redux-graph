@@ -1,3 +1,6 @@
+## [1.5.1]
+
+
 ## [1.4.3]
 
 * `rebuildEntitiesSelector()`. Same as `rebuildEntity` but takes an collection of entities.

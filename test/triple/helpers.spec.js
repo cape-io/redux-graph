@@ -1,6 +1,8 @@
 import test from 'tape'
 
-import { expandIndex, tripleIndexSelector, tripleTypeIndexSelector } from '../../src'
+import {
+  expandIndex, isTriple, tripleIndexSelector, tripleTypeIndexSelector,
+} from '../../src'
 import state from '../mock'
 
 test('expandIndex', t => {
@@ -24,5 +26,9 @@ test('tripleTypeIndexSelector', t => {
   const typeIndex = selector(state)
   t.equal(typeIndex.foo.c, state.graph.entity.c)
   t.equal(typeIndex.bar.a1, state.graph.entity.a1)
+  t.end()
+})
+test('isTriple', (t) => {
+  t.false(isTriple(new Date()))
   t.end()
 })

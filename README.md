@@ -40,7 +40,7 @@ const store = createStore(reducer)
 * `nextId()` generate a new random key. Probably unique.
 * `isEntity()` is the object an entity.
 * `isEntityCreated()` does the entity have an id field. Second arg to check dateCreated prop.
-* `isTriple()` validate triple object.
+* `isTriple()` valid triple object.
 * `insertFields()` add fields (id and dateCreate) required for save.
 * `rebuildEntity()` adds predicate fields and entity references back into a single object.
 * `entityDomainIncludes()` adds `domainIncludes` property to entity that includes entities that reference it.

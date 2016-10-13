@@ -1,10 +1,11 @@
 import { createSelector } from 'reselect'
 import {
-  flow, forEach, identity, isFunction, keys, mapValues, reduce, omitBy, overArgs, partial,
+  cond, flow, forEach, identity, isFunction, keys, mapValues,
+  nthArg, reduce, omitBy, overArgs, partial,
 } from 'lodash'
 import { invokeArg } from 'cape-lodash'
 import { insertFields, isEntity, isEntityCreated } from './entity/helpers'
-import { entityPut, entitySelector, getIndex, isTriple, triplePut } from './'
+import { entityPut, entitySelector, getIndex, isTriple, tripleErr, triplePut } from './'
 
 export function isFunc(arg) {
   if (!isFunction(arg)) throw new Error('First createIfNew argument must be dispatch func.')
@@ -20,7 +21,7 @@ export function createIfNew(dispatch, entity) {
 // Dispatch new entities and triples.
 export function createTriple(dispatch, triple) {
   isFunc(dispatch)
-  isTriple(triple)
+  tripleErr(triple)
   const subject = createIfNew(dispatch, triple.subject)
   const object = createIfNew(dispatch, triple.object)
   const tripleWithIds = { ...triple, subject, object }
@@ -53,15 +54,21 @@ export function splitEntity(item) {
 }
 
 // Create triples and dispatch required actions.
-export function create(dispatch, entity) {
+export function createEntity(dispatch, entity) {
   isFunc(dispatch)
   const { subject, triples } = splitEntity(entity)
   dispatch(entityPut(subject))
   forEach(triples, partial(createTriple, dispatch))
   return subject
 }
+export const create = cond([
+  [ flow(nthArg(1), isTriple), createTriple ],
+  [ flow(nthArg(1), isEntity), createEntity ],
+])
+
+// Expects thunk action signature (dispatch, getState).
+// Simply call getState and send it to entityBuilder.
 export function selectorCreate(entityBuilder) {
-  // Expects thunk action signature (dispatch, getState).
   return overArgs(create, [ identity, flow(invokeArg, entityBuilder) ])
 }
 
