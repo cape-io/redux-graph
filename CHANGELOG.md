@@ -1,5 +1,7 @@
-## [1.5.1]
+## [1.6.0]
 
+* `create(dispatch, entity)` creates a triple or entity. To skip the conditional check use `createEntity()` directly.
+* `selectorCreate(entityBuilder)` takes thunk action signature and passes result of `entityBuilder(getState())` to create.
 
 ## [1.4.3]
 
