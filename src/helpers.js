@@ -5,7 +5,8 @@ import {
 } from 'lodash'
 import { invokeArg } from 'cape-lodash'
 import { insertFields, isEntity, isEntityCreated } from './entity/helpers'
-import { entityPut, entitySelector, getIndex, isTriple, tripleErr, triplePut } from './'
+import { isTriple } from './triple/helpers'
+import { entityPut, entitySelector, getIndex, tripleErr, triplePut } from './'
 
 export function isFunc(arg) {
   if (!isFunction(arg)) throw new Error('First createIfNew argument must be dispatch func.')

@@ -2,7 +2,7 @@ import test from 'tape'
 
 import {
   expandIndex, isTriple, tripleIndexSelector, tripleTypeIndexSelector,
-} from '../../src'
+} from '../../src/triple/helpers'
 import state from '../mock'
 
 test('expandIndex', t => {
