@@ -1,6 +1,6 @@
 {
   "name": "redux-graph",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "Redux graph database.",
   "homepage": "https://github.com/cape-io/redux-graph",
   "author": "Kai Curry <kai@cape.io> (http://www.cape.io/)",
@@ -29,12 +29,12 @@
     "prepublish": "npm run build"
   },
   "dependencies": {
-    "cape-lodash": "^1.4.0",
+    "cape-lodash": "^1.4.1",
     "cape-redux": "^1.5.0",
-    "lodash": "^4.15.0",
-    "redux": "^3.5.2",
-    "reselect": "^2.5.3",
-    "seamless-immutable": "^6.1.1"
+    "lodash": "^4.16.4",
+    "redux": "^3.6.0",
+    "reselect": "^2.5.4",
+    "seamless-immutable": "^6.3.0"
   },
   "devDependencies": {
     "babel-cli": "^6.11.4",
