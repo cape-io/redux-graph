@@ -22,6 +22,7 @@ export const creator = {
   id: 'user0',
   type: 'Person',
   name: 'Anonymous Person or User of the website',
+  image: null,
 }
 export const agent = creator
 
@@ -32,7 +33,7 @@ export const item = {
   contents: '100% Solution Dyed Acrylic',
   dateCreated: new Date(),
   discontinued: false,
-  id: '28',
+  id: 'i28',
   labelMessage: '5512',
   lengthUnit: 'Yards',
   name: 'Dhow',

@@ -1,3 +1,7 @@
+## [1.6.2]
+
+* fix entity update reducer function.
+
 ## [1.6.0]
 
 * `create(dispatch, entity)` creates a triple or entity. To skip the conditional check use `createEntity()` directly.

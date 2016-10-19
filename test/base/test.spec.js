@@ -2,7 +2,7 @@ import test from 'tape'
 import { keys } from 'lodash'
 
 import { getSXX } from '../../src/triple/select'
-import reducer, { triplePut, entityUpdate } from '../../src/index'
+import reducer, { triplePut } from '../../src/index'
 
 const tripleState = {
   spo: {
@@ -57,11 +57,4 @@ test('getSXX selector', assert => {
   ]
   assert.deepEquals(result, expected, 'result returns both triples.')
   assert.end()
-})
-
-test('entityUpdate', t => {
-  const entity = { id: 'foo', bar: true }
-  const result = reducer({}, entityUpdate(entity))
-  t.deepEquals(result.entity.foo, entity)
-  t.end()
 })

@@ -12,10 +12,11 @@ function triplePut(state, { object }) {
   return state[id] ? state : putReducer(state, object)
 }
 function update(state, payload) {
-  if (state[state[payload.id]]) {
-    return state.set(payload.id, state[payload.id].merge(payload))
+  if (!state[payload.id]) {
+    console.error(payload.id, state)
+    throw new Error('ID not found in state.')
   }
-  return state.set(payload.id, payload)
+  return state.set(payload.id, state[payload.id].merge(payload))
 }
 const reducers = {
   [DEL]: (state, payload) => state.without(payload.id),

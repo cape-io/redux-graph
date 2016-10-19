@@ -16,7 +16,7 @@ export function isFunc(arg) {
 export function createIfNew(dispatch, entity) {
   isFunc(dispatch)
   if (isEntityCreated(entity)) return entity
-  return create(dispatch, entity) // eslint-disable-line no-use-before-define
+  return createEntity(dispatch, entity) // eslint-disable-line no-use-before-define
 }
 
 // Dispatch new entities and triples.

@@ -2,7 +2,7 @@ import test from 'tape'
 import { constant, forEach, isArray, isObject, matches } from 'lodash'
 
 import {
-  createEntity, createIfNew, createTriple, insertFields, isEntity, isEntityCreated, isTriple, key0,
+  createEntity, createIfNew, insertFields, isEntity, isEntityCreated, isTriple, key0,
   splitEntity, selectorCreate, val0,
 } from '../../src'
 import state, { collection, creator, mainEntity } from '../mock'
@@ -94,24 +94,6 @@ test('splitEntity', t => {
   t.equal(split2.triples.length, 0)
   t.end()
 })
-test('createTriple()', (t) => {
-  const triple = {
-    subject: { id: 'foo', type: 'Thing' },
-    predicate: 'likes',
-    object: { id: 'bar', type: 'Food' },
-  }
-  t.plan(2)
-  function dispatch(action) {
-    t.equal(action.type, 'graph/triple/PUT', 'type is the same')
-    t.deepEqual(action.payload.id, [ 'foo', 'likes', 'bar' ])
-    t.equal(action.payload.subject, triple.subject)
-    t.equal(action.payload.predicate, triple.predicate)
-    t.equal(action.payload.object, triple.object)
-    t.deepEqual(action, triple)
-  }
-  createTriple(dispatch, triple)
-  t.end()
-})
 const expectedActions = constant([
   {
     type: 'graph/entity/PUT',
@@ -142,14 +124,16 @@ test('createEntity()', t => {
   createEntity(dispatch, collection)
 })
 test('selectorCreate', (t) => {
-  t.plan(3)
+  t.plan(4)
+  const car = { type: 'Automobile', name: 'Audi' }
   function dispatch(action) {
     t.equal(action.type, 'graph/entity/PUT', 'type is the same')
-    t.ok(matches(state.other)(action.payload))
+    t.ok(matches(car)(action.payload))
+    t.ok(action.payload.id)
   }
   function entityBuilder(passedState) {
     t.equal(passedState, state, 'entityBuilder passed state')
-    return passedState.other
+    return car
   }
   const getState = constant(state)
   selectorCreate(entityBuilder)(dispatch, getState)
