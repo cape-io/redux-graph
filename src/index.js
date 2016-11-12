@@ -9,17 +9,22 @@ export * from './triple/helpers'
 
 export {
   del as entityDel,
+  DEL as ENTITY_DEL,
   put as entityPut,
   PUT as ENTITY_PUT,
   putAll as entityPutAll,
+  PUT_ALL as ENTITY_PUT_ALL,
   update as entityUpdate,
   UPDATE as ENTITY_UPDATE,
 } from './entity/actions'
 
 export {
   del as tripleDel,
+  DEL as TRIPLE_DEL,
   put as triplePut,
+  PUT as TRIPLE_PUT,
   putAll as triplePutAll,
+  PUT_ALL as TRIPLE_PUT_ALL,
 } from './triple/actions'
 
 export * from './select'
