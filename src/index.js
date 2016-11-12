@@ -10,6 +10,7 @@ export * from './triple/helpers'
 export {
   del as entityDel,
   put as entityPut,
+  PUT as ENTITY_PUT,
   putAll as entityPutAll,
   update as entityUpdate,
   UPDATE as ENTITY_UPDATE,

@@ -31,6 +31,10 @@ const store = createStore(reducer)
 * triplePut
 * triplePutAll
 
+## Selectors
+
+* entitySelector
+
 ## Helper functions.
 
 * `create(dispatch, item)` will create required triples and objects.

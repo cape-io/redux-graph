@@ -1,11 +1,9 @@
-import filter from 'lodash/filter'
-import isFunction from 'lodash/isFunction'
-import reduce from 'lodash/reduce'
+import { filter, isFunction, reduce, set } from 'lodash'
 import { createSelector } from 'reselect'
-import set from 'lodash/set'
+import { select } from 'cape-select'
 import { graphSelector } from '../select'
 
-export const entitySelector = state => graphSelector(state).entity
+export const entitySelector = select(graphSelector, 'entity')
 
 export function selectEntityById(state, id) {
   return entitySelector(state)[id]
