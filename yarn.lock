@@ -997,21 +997,27 @@ camelcase@^2.0.0:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/camelcase/-/camelcase-2.1.1.tgz#7c1d16d679a1bbe59ca02cacecfb011e201f5a1f"
 
-cape-lodash, cape-lodash@^1.5.0:
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/cape-lodash/-/cape-lodash-1.6.0.tgz#d0adcd2e641cfd71dfa6cef7bb8e3db5fcf61fcf"
-  dependencies:
-    lodash "^4.16.6"
-
 cape-lodash@^1.0.0:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/cape-lodash/-/cape-lodash-1.4.1.tgz#106be70d52269114ca372eac1c7d18c3899f2d2f"
   dependencies:
     lodash "^4.15.0"
 
-cape-redux:
-  version "1.6.1"
-  resolved "https://registry.yarnpkg.com/cape-redux/-/cape-redux-1.6.1.tgz#f0847b386c3fb9201110e19c35015af2e34cb9cd"
+cape-lodash@^1.5.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/cape-lodash/-/cape-lodash-1.6.0.tgz#d0adcd2e641cfd71dfa6cef7bb8e3db5fcf61fcf"
+  dependencies:
+    lodash "^4.16.6"
+
+cape-lodash@1.7.0:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/cape-lodash/-/cape-lodash-1.7.0.tgz#e4988077ed4cf8d3f21f62a0a1ff09828e6bd01f"
+  dependencies:
+    lodash "^4.16.6"
+
+cape-redux@2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/cape-redux/-/cape-redux-2.1.1.tgz#ff9a80815fc215f33d90c3e04d9e0759b4097fd0"
   dependencies:
     cape-lodash "^1.5.0"
     lodash "^4.16.6"

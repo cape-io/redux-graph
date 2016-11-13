@@ -1,112 +1,83 @@
-import { createSelector } from 'reselect'
-import {
-  cond, flow, forEach, identity, isFunction, keys, mapValues,
-  nthArg, reduce, omitBy, overArgs, partial,
-} from 'lodash'
-import { invokeArg } from 'cape-lodash'
-import { insertFields, isEntity, isEntityCreated } from './entity/helpers'
-import { isTriple } from './triple/helpers'
-import { entityPut, entitySelector, getIndex, tripleErr, triplePut } from './'
+import { isPlainObject, isString, negate, now, reduce, set } from 'lodash'
+import { pick } from 'lodash/fp'
+import { setIn } from 'cape-redux'
+import { isEntityCreated } from './lang'
 
-export function isFunc(arg) {
-  if (!isFunction(arg)) throw new Error('First createIfNew argument must be dispatch func.')
+// Generate a new random key. Probably unique.
+export function nextId() {
+  return Math.random().toString(36).substr(6)
+  .substring(1, 9)
+}
+export function getKey({ type, id }) {
+  return `${type}_${id}`
+}
+export const pickTypeId = pick([ 'dateModified', 'id', 'type' ])
+export function getRefPath(predicate, obj) {
+  if (!isString(predicate)) throw new Error('predicate must be a string.')
+  return [ '_refs', predicate, getKey(obj) ]
+}
+export function setRef(subject, predicate, obj) {
+  return setIn(getRefPath(predicate, obj), subject, pickTypeId(obj))
+}
+export function buildRefs(result, val, predicate) {
+  if (isEntityCreated(val)) return setRef(result, predicate, val)
+  return set(result, predicate, val)
+}
+// Split out triple refs because the need to be handled in the reducer.
+export function clean(entity) {
+  return reduce(entity, buildRefs, {})
 }
 
-// Dispatch new entity if it doesn't have an id field. Otherwise returns entity.
-export function createIfNew(dispatch, entity) {
-  isFunc(dispatch)
-  if (isEntityCreated(entity)) return entity
-  return createEntity(dispatch, entity) // eslint-disable-line no-use-before-define
+export function requireIdType(props, typeId = null, doPick = true) {
+  if (!props.id) throw new Error('Must have id prop.')
+  if (!props.type) throw new Error('Must have a type prop.')
+  if (typeId && props.type !== typeId) throw new Error('Wrong entity type.')
+  return doPick ? pick('id', 'type') : null
 }
 
-// Dispatch new entities and triples.
-export function createTriple(dispatch, triple) {
-  isFunc(dispatch)
-  tripleErr(triple)
-  const subject = createIfNew(dispatch, triple.subject)
-  const object = createIfNew(dispatch, triple.object)
-  const tripleWithIds = { ...triple, subject, object }
-  dispatch(triplePut(tripleWithIds))
-  return tripleWithIds
-}
-
-export function buildTriples(subject) {
-  return (res, val, predicate) => {
-    if (isEntity(val)) {
-      const triple = { predicate, subject, object: val }
-      return res.concat(triple)
-    }
-    // @TODO Handle array values.
-    return res
+// Add fields required for save.
+export function insertFields(data) {
+  requireIdType(data, null, false)
+  return {
+    type: 'Thing',
+    rangeIncludes: {},
+    _refs: {},
+    ...clean(data),
+    dateCreated: data.dateCreated ? data.dateCreated : now(),
+    id: data.id ? data.id : nextId(),
   }
 }
-export function getFields(entity) {
-  return omitBy(entity, isEntity)
+export function updateFields(data) {
+  return {
+    ...insertFields(data),
+    dateModified: data.dateModified ? data.dateModified : now(),
+  }
 }
-// Split an entity into its database parts. Subject and its triples.
-export function splitEntity(item) {
-  // Create an id for the new entity.
-  const entity = insertFields(item)
-  // Clear out any entity ref fields.
-  const subject = getFields(entity)
-  // Build out triples.
-  const triples = reduce(entity, buildTriples(subject), [])
-  return { subject, triples }
+export function uniqEntity(type) { return insertFields({ type }) }
+export function getPath(item) {
+  requireIdType(item, null, false)
+  return [ item.type, item.id ]
 }
-
-// Create triples and dispatch required actions.
-export function createEntity(dispatch, entity) {
-  isFunc(dispatch)
-  const { subject, triples } = splitEntity(entity)
-  dispatch(entityPut(subject))
-  forEach(triples, partial(createTriple, dispatch))
-  return subject
-}
-export const create = cond([
-  [ flow(nthArg(1), isTriple), createTriple ],
-  [ flow(nthArg(1), isEntity), createEntity ],
-])
-
-// Expects thunk action signature (dispatch, getState).
-// Simply call getState and send it to entityBuilder.
-export function selectorCreate(entityBuilder) {
-  return overArgs(create, [ identity, flow(invokeArg, entityBuilder) ])
+const errMsgs = {
+  plainObj: 'Triple must be an object.',
+  subEnt: 'Triple must include subject object.',
+  predicate: 'Predicate must be a string.',
+  objEnt: 'Triple must include object prop.',
 }
 
-export function entityPredicates(entity, spo, id) {
-  return mapValues(spo[id], (objectIds) =>
-    mapValues(objectIds, (trip, objId) =>
-      rebuildEntity(entity, spo, objId) // eslint-disable-line no-use-before-define
-    )
-  )
+export function getTripleError(triple) {
+  const { subject, predicate, object } = triple
+  if (!isPlainObject(triple)) return errMsgs.plainObj
+  if (!isEntityCreated(subject)) return errMsgs.subEnt
+  if (!isString(predicate)) return errMsgs.predicate
+  if (!isEntityCreated(object)) return errMsgs.objEnt
+  return false
 }
-export function rebuildEntity(entity, spo, id) {
-  if (!spo[id]) return entity[id]
-  return entity[id].merge(entityPredicates(entity, spo, id))
+
+export function tripleErr(triple, checkCreated) {
+  const errMsg = getTripleError(triple, checkCreated)
+  return (errMsg && new Error(errMsg)) || triple
 }
-export function rebuildEntitySelector(entityIdSelector) {
-  return createSelector(entitySelector, getIndex.spo, entityIdSelector, rebuildEntity)
-}
-export function rebuildEntities(entity, spo, entities) {
-  return mapValues(entities, ({ id }) => rebuildEntity(entity, spo, id))
-}
-export function rebuildEntitiesSelector(entitiesSelector) {
-  return createSelector(entitySelector, getIndex.spo, entitiesSelector, rebuildEntities)
-}
-export function entityDomains(entity, ops, id) {
-  return mapValues(ops[id], predicate =>
-    mapValues(predicate, (trip, domainId) =>
-      getDomainIncludes(entity, ops, domainId) // eslint-disable-line no-use-before-define
-    )
-  )
-}
-export function getDomainIncludes(entity, ops, id) {
-  if (!ops[id]) return entity[id]
-  return entity[id].set('domainIncludes', entityDomains(entity, ops, id))
-}
-export function entityDomainIncludes(entityIdSelector) {
-  return createSelector(entitySelector, getIndex.ops, entityIdSelector, getDomainIncludes)
-}
-// Maybe just use _.find instead?
-export function key0(obj) { return keys(obj)[0] }
-export function val0(obj) { return obj[key0(obj)] }
+export const isTriple = negate(getTripleError)
+
+// @TODO Create ref entities before put subject.

@@ -1,6 +1,6 @@
 {
   "name": "redux-graph",
-  "version": "1.7.1",
+  "version": "2.0.0",
   "description": "Redux graph database.",
   "homepage": "https://github.com/cape-io/redux-graph",
   "author": "Kai Curry <kai@cape.io> (http://www.cape.io/)",
@@ -25,12 +25,12 @@
   "scripts": {
     "build": "mkdir -p lib && babel ./src -d lib",
     "lint": "eslint examples src test",
-    "test": "babel-tape-runner test/**/*spec.js",
+    "test": "babel-tape-runner test/*spec.js",
     "prepublish": "npm run build"
   },
   "dependencies": {
-    "cape-lodash": "^1.6.0",
-    "cape-redux": "^1.6.1",
+    "cape-lodash": "1.7.0",
+    "cape-redux": "2.1.1",
     "cape-select": "^2.2.1",
     "lodash": "^4.16.6",
     "redux": "^3.6.0",

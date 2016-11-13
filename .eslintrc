@@ -24,6 +24,7 @@
       "properties": "never",
       "exceptions": ["t", "id"]
     }],
+    "import/no-extraneous-dependencies": ["error", {"devDependencies": ["**/*.spec.js", "**/mock.js"]}],
     "import/no-named-as-default": 2,
     "import/default": 0,
     "react/jsx-uses-react": 2,

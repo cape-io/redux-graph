@@ -1,4 +1,32 @@
+import { now } from 'lodash'
+
 const state = { graph: { entity: {} }, other: { foo: 'bar' } }
+export const mainEntity = { id: 'pBlf', type: 'DataFeed' }
+export const creator = {
+  id: 'user0',
+  type: 'Person',
+  name: 'Anonymous Person or User of the website',
+  image: null,
+}
+export const item = {
+  approxWidth: '57"',
+  category: 'textile',
+  colors: [],
+  contents: '100% Solution Dyed Acrylic',
+  dateCreated: now(),
+  dateModified: now(),
+  discontinued: false,
+  id: 'i28',
+  labelMessage: '5512',
+  lengthUnit: 'Yards',
+  name: 'Dhow',
+  originCountry: 'Italy',
+  patternNumber: '10001',
+  price: '$90',
+  colorNumber: '28',
+  type: 'Item',
+  isPattern: false,
+}
 function addEntity(id, type = 'foo') {
   state.graph.entity[id] = { id, type }
 }
@@ -18,32 +46,10 @@ state.graph.typeIndex = {
     a1: true, b1: true, c1: true, d1: true,
   },
 }
-export const creator = {
-  id: 'user0',
-  type: 'Person',
-  name: 'Anonymous Person or User of the website',
-  image: null,
-}
+
 export const agent = creator
 
-export const item = {
-  approxWidth: '57"',
-  category: 'textile',
-  colors: [],
-  contents: '100% Solution Dyed Acrylic',
-  dateCreated: new Date(),
-  discontinued: false,
-  id: 'i28',
-  labelMessage: '5512',
-  lengthUnit: 'Yards',
-  name: 'Dhow',
-  originCountry: 'Italy',
-  patternNumber: '10001',
-  price: '$90',
-  colorNumber: '28',
-  type: 'Item',
-  isPattern: false,
-}
+
 export const listItem = {
   actionStatus: 'created',
   agent,
@@ -64,7 +70,6 @@ export const trouble = {
   predicate: 'itemListElement',
   object: listItem,
 }
-export const mainEntity = { id: 'pBlf', type: 'DataFeed' }
 
 export const title = 'Favorites'
 export const collection = {
