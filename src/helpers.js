@@ -46,7 +46,7 @@ export function insertFields(data = {}) {
   return {
     type: 'Thing',
     rangeIncludes: {},
-    _refs: {},
+    [REF]: {},
     ...buildRefs(data),
     dateCreated: data.dateCreated ? data.dateCreated : now(),
     id: data.id ? data.id : nextId(),
@@ -73,4 +73,10 @@ export function buildTriple(triple) {
   }
 }
 
-// @TODO Create ref entities before put subject.
+export function rangePath(obj, predicate, subj, subjKey) {
+  const key = subjKey ? subjKey : getKey(subj)
+  return getPath(obj).concat([ 'rangeIncludes', predicate, key ])
+}
+export function setRangeIncludes(prevState, obj, predicate, subj, subjKey) {
+  return setIn(rangePath(obj, predicate, subj, subjKey), prevState, subj)
+}

@@ -1,7 +1,7 @@
 import { now } from 'lodash'
 
-const state = { graph: { entity: {} }, other: { foo: 'bar' } }
 export const mainEntity = { id: 'pBlf', type: 'DataFeed' }
+export const agent = { id: 'ag12', type: 'Person', name: 'Silly Sam' }
 export const creator = {
   id: 'user0',
   type: 'Person',
@@ -27,29 +27,13 @@ export const item = {
   type: 'Item',
   isPattern: false,
 }
-function addEntity(id, type = 'foo') {
-  state.graph.entity[id] = { id, type }
+export const collection = {
+  creator, // User that created the thing.
+  itemListOrder: 'Ascending',
+  mainEntity, // List of what.
+  title: 'Favorites',
+  type: 'CollectionList',
 }
-addEntity('a')
-addEntity('b')
-addEntity('c')
-addEntity('d')
-addEntity('a1', 'bar')
-addEntity('b1', 'bar')
-addEntity('c1', 'bar')
-addEntity('d1', 'bar')
-state.graph.typeIndex = {
-  foo: {
-    a: true, b: true, c: true, d: true,
-  },
-  bar: {
-    a1: true, b1: true, c1: true, d1: true,
-  },
-}
-
-export const agent = creator
-
-
 export const listItem = {
   actionStatus: 'created',
   agent,
@@ -58,26 +42,3 @@ export const listItem = {
   startTime: '2016-08-30T17:41:43.233Z',
   type: 'ListItem',
 }
-export const trouble = {
-  subject: {
-    additionalType: 'Project',
-    itemListOrder: 'Ascending',
-    title: 'Favorites',
-    type: 'CollectionList',
-    dateCreated: '2016-08-30T17:41:43.224Z',
-    id: 'i5dtxvjo',
-  },
-  predicate: 'itemListElement',
-  object: listItem,
-}
-
-export const title = 'Favorites'
-export const collection = {
-  creator, // User that created the thing.
-  itemListOrder: 'Ascending',
-  mainEntity, // List of what.
-  title,
-  type: 'CollectionList',
-}
-export const collection2 = { ...collection, title: 'Kai' }
-export default state

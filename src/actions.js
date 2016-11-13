@@ -8,8 +8,8 @@ export const entityDel = createAction(ENTITY_DEL, requireIdType)
 export const ENTITY_PUT = 'graph/ENTITY_PUT'
 export const entityPut = createAction(ENTITY_PUT, insertFields)
 
-export const ENTITY_PUT_ALL = 'graph/ENTITY_PUT_ALL'
-export const entityPutAll = createAction(ENTITY_PUT_ALL, values => {
+export const ENTITY_PUTALL = 'graph/ENTITY_PUTALL'
+export const entityPutAll = createAction(ENTITY_PUTALL, values => {
   if (!isArray(values)) throw new Error('Must send putAll an array.')
   return map(values, insertFields)
 })

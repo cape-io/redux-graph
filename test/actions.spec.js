@@ -1,7 +1,7 @@
 import test from 'tape'
 import { isArray, isMatch, isNumber } from 'lodash'
 import {
-  entityDel, ENTITY_DEL, entityPut, ENTITY_PUT, entityPutAll, ENTITY_PUT_ALL,
+  entityDel, ENTITY_DEL, entityPut, ENTITY_PUT, entityPutAll, ENTITY_PUTALL,
   entityUpdate, ENTITY_UPDATE, pickTypeId, triplePut, TRIPLE_PUT,
 } from '../src'
 import { agent, creator, item, mainEntity } from './mock'
@@ -21,7 +21,7 @@ test('entityPut', (t) => {
 })
 test('entityPutAll', (t) => {
   const act = entityPutAll([ agent, creator, item, mainEntity ])
-  t.equal(act.type, ENTITY_PUT_ALL)
+  t.equal(act.type, ENTITY_PUTALL)
   t.ok(isArray(act.payload))
   t.equal(act.payload.length, 4)
   t.ok(isNumber(act.payload[0].dateCreated))

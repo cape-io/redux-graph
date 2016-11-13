@@ -3,10 +3,10 @@ import { get, partial } from 'lodash'
 
 import {
   buildRef, buildRefs, getKey, getPath, getRefPath, insertFields, nextId,
-  pickTypeId, requireIdType, setRef, validId,
+  pickTypeId, rangePath, requireIdType, setRef, setRangeIncludes, validId,
 } from '../src'
 
-import { creator, item, mainEntity } from './mock'
+import { agent, creator, item, mainEntity } from './mock'
 
 test('nextId', (t) => {
   t.ok(validId(nextId()))
@@ -80,5 +80,24 @@ test('insertFields', (t) => {
   t.deepEqual(ent3, {
     ...entity, _refs: { creator: pickTypeId(creator) }, dateCreated: ent3.dateCreated,
   })
+  t.end()
+})
+test('rangePath', (t) => {
+  const path = rangePath(creator, 'friend', agent)
+  t.deepEqual(path, [ 'Person', 'user0', 'rangeIncludes', 'friend', 'Person_ag12' ])
+  const path2 = rangePath(creator, 'friend', agent, 'Key_obj')
+  t.deepEqual(path2, [ 'Person', 'user0', 'rangeIncludes', 'friend', 'Key_obj' ])
+  t.end()
+})
+test('setRangeIncludes', (t) => {
+  const obj = pickTypeId(creator)
+  const state = setRangeIncludes({}, obj, 'friend', agent)
+  t.equal(state.Person.user0.rangeIncludes.friend.Person_ag12.id, agent.id)
+  const expect = {
+    Person: {
+      user0: { rangeIncludes: { friend: { Person_ag12: agent } } },
+    },
+  }
+  t.deepEqual(state, expect)
   t.end()
 })

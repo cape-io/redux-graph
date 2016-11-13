@@ -1,5 +1,6 @@
-import reducer from './reducer'
+import reducer, { reducers } from './reducer'
 
+export { reducers }
 export * from './actions'
 export * from './lang'
 export * from './helpers'
