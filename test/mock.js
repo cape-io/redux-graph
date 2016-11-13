@@ -16,7 +16,7 @@ export const item = {
   dateCreated: now(),
   dateModified: now(),
   discontinued: false,
-  id: 'i28',
+  id: 'i28z',
   labelMessage: '5512',
   lengthUnit: 'Yards',
   name: 'Dhow',

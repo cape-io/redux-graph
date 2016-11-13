@@ -3,6 +3,8 @@ import { pick } from 'lodash/fp'
 import { setIn } from 'cape-redux'
 import { isEntityCreated } from './lang'
 
+export const REF = '_refs'
+
 // Generate a new random key. Probably unique.
 export function nextId() {
   return Math.random().toString(36).substr(6)
@@ -11,38 +13,41 @@ export function nextId() {
 export function getKey({ type, id }) {
   return `${type}_${id}`
 }
+
 export const pickTypeId = pick([ 'dateModified', 'id', 'type' ])
-export function getRefPath(predicate, obj) {
+export function getRefPath(predicate, obj, single = true) {
   if (!isString(predicate)) throw new Error('predicate must be a string.')
-  return [ '_refs', predicate, getKey(obj) ]
+  return single ? [ REF, predicate ] : [ REF, predicate, getKey(obj) ]
 }
 export function setRef(subject, predicate, obj) {
   return setIn(getRefPath(predicate, obj), subject, pickTypeId(obj))
 }
-export function buildRefs(result, val, predicate) {
+export function buildRef(result, val, predicate) {
+  // Does not support merging of previously set REF field.
   if (isEntityCreated(val)) return setRef(result, predicate, val)
   return set(result, predicate, val)
 }
 // Split out triple refs because the need to be handled in the reducer.
-export function clean(entity) {
-  return reduce(entity, buildRefs, {})
+export function buildRefs(entity) {
+  return reduce(entity, buildRef, {})
 }
 
 export function requireIdType(props, typeId = null, doPick = true) {
-  if (!props.id) throw new Error('Must have id prop.')
-  if (!props.type) throw new Error('Must have a type prop.')
+  if (!isEntityCreated(props)) throw new Error('Must have a type and id prop.')
   if (typeId && props.type !== typeId) throw new Error('Wrong entity type.')
-  return doPick ? pick('id', 'type') : null
+  return doPick ? pickTypeId(props) : null
 }
-
+export function getPath(item) {
+  requireIdType(item, null, false)
+  return [ item.type, item.id ]
+}
 // Add fields required for save.
-export function insertFields(data) {
-  requireIdType(data, null, false)
+export function insertFields(data = {}) {
   return {
     type: 'Thing',
     rangeIncludes: {},
     _refs: {},
-    ...clean(data),
+    ...buildRefs(data),
     dateCreated: data.dateCreated ? data.dateCreated : now(),
     id: data.id ? data.id : nextId(),
   }
@@ -54,30 +59,5 @@ export function updateFields(data) {
   }
 }
 export function uniqEntity(type) { return insertFields({ type }) }
-export function getPath(item) {
-  requireIdType(item, null, false)
-  return [ item.type, item.id ]
-}
-const errMsgs = {
-  plainObj: 'Triple must be an object.',
-  subEnt: 'Triple must include subject object.',
-  predicate: 'Predicate must be a string.',
-  objEnt: 'Triple must include object prop.',
-}
-
-export function getTripleError(triple) {
-  const { subject, predicate, object } = triple
-  if (!isPlainObject(triple)) return errMsgs.plainObj
-  if (!isEntityCreated(subject)) return errMsgs.subEnt
-  if (!isString(predicate)) return errMsgs.predicate
-  if (!isEntityCreated(object)) return errMsgs.objEnt
-  return false
-}
-
-export function tripleErr(triple, checkCreated) {
-  const errMsg = getTripleError(triple, checkCreated)
-  return (errMsg && new Error(errMsg)) || triple
-}
-export const isTriple = negate(getTripleError)
 
 // @TODO Create ref entities before put subject.
