@@ -13,11 +13,22 @@ export function nextId() {
 export function getKey({ type, id }) {
   return `${type}_${id}`
 }
-
 export const pickTypeId = pick([ 'dateModified', 'id', 'type' ])
+export function requireIdType(props, typeId = null, doPick = true) {
+  if (!isEntityCreated(props)) throw new Error('Must have a type and id prop.')
+  if (typeId && props.type !== typeId) throw new Error('Wrong entity type.')
+  return doPick ? pickTypeId(props) : null
+}
+export function getPath(item) {
+  requireIdType(item, null, false)
+  return [ item.type, item.id ]
+}
 export function getRefPath(predicate, obj, single = true) {
   if (!isString(predicate)) throw new Error('predicate must be a string.')
   return single ? [ REF, predicate ] : [ REF, predicate, getKey(obj) ]
+}
+export function fullRefPath(subj, predicate, obj, single = true) {
+  return getPath(subj).concat(getRefPath(predicate, obj, single))
 }
 export function setRef(subject, predicate, obj) {
   return setIn(getRefPath(predicate, obj), subject, pickTypeId(obj))
@@ -30,16 +41,6 @@ export function buildRef(result, val, predicate) {
 // Split out triple refs because the need to be handled in the reducer.
 export function buildRefs(entity) {
   return reduce(entity, buildRef, {})
-}
-
-export function requireIdType(props, typeId = null, doPick = true) {
-  if (!isEntityCreated(props)) throw new Error('Must have a type and id prop.')
-  if (typeId && props.type !== typeId) throw new Error('Wrong entity type.')
-  return doPick ? pickTypeId(props) : null
-}
-export function getPath(item) {
-  requireIdType(item, null, false)
-  return [ item.type, item.id ]
 }
 // Add fields required for save.
 export function insertFields(data = {}) {
