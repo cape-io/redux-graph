@@ -1,7 +1,7 @@
-import { isPlainObject, isString, negate, now, reduce, set } from 'lodash'
+import { isString, now, reduce, set } from 'lodash'
 import { pick } from 'lodash/fp'
 import { setIn } from 'cape-redux'
-import { isEntityCreated } from './lang'
+import { isEntityCreated, getTripleError } from './lang'
 
 export const REF = '_refs'
 
@@ -59,5 +59,18 @@ export function updateFields(data) {
   }
 }
 export function uniqEntity(type) { return insertFields({ type }) }
+
+export function tripleErr(triple) {
+  const errMsg = getTripleError(triple)
+  if (errMsg) throw new Error(errMsg)
+}
+export function buildTriple(triple) {
+  tripleErr(triple)
+  return {
+    subject: pickTypeId(triple.subject),
+    predicate: triple.predicate,
+    object: pickTypeId(triple.object),
+  }
+}
 
 // @TODO Create ref entities before put subject.

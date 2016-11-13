@@ -74,9 +74,11 @@ test('insertFields', (t) => {
     id: entity.id,
   })
   const ent2 = insertFields(pickTypeId(entity))
-  t.deepEqual(ent2, entity)
+  t.deepEqual(ent2, { ...entity, dateCreated: ent2.dateCreated }, 'ent2, entity')
   ent2.creator = creator
   const ent3 = insertFields(ent2)
-  t.deepEqual(ent3, { ...entity, _refs: { creator: pickTypeId(creator) } })
+  t.deepEqual(ent3, {
+    ...entity, _refs: { creator: pickTypeId(creator) }, dateCreated: ent3.dateCreated,
+  })
   t.end()
 })

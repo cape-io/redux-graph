@@ -37,9 +37,4 @@ export function getTripleError(triple) {
   if (!isEntityCreated(object)) return errMsgs.objEnt
   return false
 }
-
-export function tripleErr(triple, checkCreated) {
-  const errMsg = getTripleError(triple, checkCreated)
-  return (errMsg && new Error(errMsg)) || triple
-}
 export const isTriple = negate(getTripleError)
