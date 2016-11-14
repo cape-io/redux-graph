@@ -1,6 +1,6 @@
 import test from 'tape'
 
-import { entityHasType, isEntity, isEntityCreated, validId, validType } from '../src'
+import { entityHasType, isEntity, isEntityCreated, isValidId, isValidType } from '../src'
 import { agent, creator, item, mainEntity } from './mock'
 
 test('isEntity', t => {
@@ -35,14 +35,14 @@ test('entityHasType', t => {
   t.true(entityHasType('Foo', { type: 'Foo' }), 'object with type')
   t.end()
 })
-test('validId', (t) => {
-  t.false(validId(''))
-  t.false(validId('abc'))
-  t.ok(validId(item.id))
+test('isValidId', (t) => {
+  t.false(isValidId(''))
+  t.false(isValidId('abc'))
+  t.ok(isValidId(item.id))
   t.end()
 })
-test('validType', (t) => {
-  t.ok(validType('Test'))
-  t.false(validType('bosa'))
+test('isValidType', (t) => {
+  t.ok(isValidType('Test'))
+  t.false(isValidType('bosa'))
   t.end()
 })

@@ -1,7 +1,7 @@
-import { isString, now, reduce, set } from 'lodash'
+import { isPlainObject, isString, now, reduce, set } from 'lodash'
 import { pick } from 'lodash/fp'
 import { setIn } from 'cape-redux'
-import { isEntityCreated, getTripleError } from './lang'
+import { isEntityCreated, getTripleError, isValidId, isValidType } from './lang'
 
 export const REF = '_ref'
 export const REFS = REF
@@ -16,7 +16,9 @@ export function getKey({ type, id }) {
 }
 export const pickTypeId = pick([ 'dateModified', 'id', 'type' ])
 export function requireIdType(props, typeId = null, doPick = true) {
-  if (!isEntityCreated(props)) throw new Error('Must have a type and id prop.')
+  if (!isPlainObject(props)) throw new Error('Must pass an object.')
+  if (!isValidType(props.type)) throw new Error('Must have a valid type.')
+  if (!isValidId(props.id)) throw new Error('Must have a valid id.')
   if (typeId && props.type !== typeId) throw new Error('Wrong entity type.')
   return doPick ? pickTypeId(props) : null
 }

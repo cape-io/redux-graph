@@ -1,4 +1,6 @@
 import { now } from 'lodash'
+import { combineReducers, createStore } from 'redux'
+import graph, { entityPutAll } from '../src'
 
 export const mainEntity = { id: 'pBlf', type: 'DataFeed' }
 export const agent = { id: 'ag12', type: 'Person', name: 'Silly Sam' }
@@ -41,4 +43,12 @@ export const listItem = {
   position: 100,
   startTime: '2016-08-30T17:41:43.233Z',
   type: 'ListItem',
+}
+const reducer = combineReducers({
+  graph,
+})
+export function configStore() {
+  const store = createStore(reducer)
+  store.dispatch(entityPutAll([ agent, item, creator ]))
+  return store
 }

@@ -5,16 +5,16 @@ import {
 function entityChecker(source) {
   return overEvery(isPlainObject, conforms(source))
 }
-export function validType(type) {
-  return isString(type) && type[0] === type[0].toUpperCase()
+export function isValidType(type) {
+  return isString(type) && type.length > 2 && type[0] === type[0].toUpperCase()
 }
-export function validId(id) {
+export function isValidId(id) {
   return isString(id) && id.length > 3
 }
 // Check to see if object has required fields to be an entity.
-const entity = { type: validType }
+const entity = { type: isValidType }
 export const isEntity = entityChecker(entity)
-const entityCreated = { ...entity, id: validId }
+const entityCreated = { ...entity, id: isValidId }
 export const isEntityCreated = entityChecker(entityCreated)
 const entityCreatedDate = { ...entityCreated, dateCreated: isNumber }
 export const isEntityCreatedDate = entityChecker(entityCreatedDate)

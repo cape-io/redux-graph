@@ -7,10 +7,8 @@ import { isEntityCreated } from './lang'
 
 const fpSelect = curry(select, 2)
 export const selectGraph = property('graph')
-export const selectEntity = select(selectGraph, 'entity')
-export const entityTypeSelector = fpSelect(selectEntity)
-export const entityPath = flow(getPath, property)
-export const entitySelector = flow(entityPath, fpSelect(selectGraph))
+export const entityTypeSelector = fpSelect(selectGraph)
+export const entitySelector = flow(getPath, fpSelect(selectGraph))
 export const getEntity = curry((state, entity) => entitySelector(entity)(state))
 
 export const getFullEntity = curry((state, entity) => {

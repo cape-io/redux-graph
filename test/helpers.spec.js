@@ -3,13 +3,13 @@ import { get, partial } from 'lodash'
 
 import {
   buildRef, buildRefs, fullRefPath, getKey, getPath, getRefPath, insertFields, nextId,
-  pickTypeId, rangePath, REF, requireIdType, setRef, setRangeIncludes, validId,
+  pickTypeId, rangePath, REF, requireIdType, setRef, setRangeIncludes, isValidId,
 } from '../src'
 
 import { agent, creator, item, mainEntity } from './mock'
 
 test('nextId', (t) => {
-  t.ok(validId(nextId()))
+  t.ok(isValidId(nextId()))
   t.end()
 })
 test('getKey', (t) => {
