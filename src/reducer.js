@@ -1,8 +1,10 @@
 import { ary, get, isEmpty, omit, partialRight, reduce } from 'lodash'
-import { createReducer, merge, set, setIn } from 'cape-redux'
+import { createReducer, merge, setIn } from 'cape-redux'
 
 import { ENTITY_DEL, ENTITY_PUT, ENTITY_PUTALL, ENTITY_UPDATE } from './actions'
-import { getKey, fullRefPath, getPath, setRangeIncludes, REF, REFS, pickTypeId } from './helpers'
+import {
+  getKey, fullRefPath, getPath, setRangeIncludes, rangePath, REF, REFS, pickTypeId,
+} from './helpers'
 
 // Update `rangeIncludes` values on object entity.
 export function updateRefObjs(state, item) {
@@ -52,10 +54,25 @@ export function entityUpdateReducer(state, item) {
   const newState = setIn(path, state, node)
   return updateRangeSubjs(updateRefObjs(newState, node), node)
 }
+export function delAt(path, state) {
+  const omitKey = path.pop()
+  return setIn(path, state, omit(get(state, path), omitKey))
+}
+export function delRange(state, predicate, obj, subj) {
+  return delAt(rangePath(obj, predicate, subj), state)
+}
+// Remove from all rangeIncludes.
+export function delRanges(state, item) {
+  if (isEmpty(item[REF])) return state
+  return reduce(item[REF], ary(partialRight(delRange, item), 3), state)
+}
+export function entityDelReducer(state, item) {
+  return delAt(getPath(item), state)
+}
 export const reducers = {
   [ENTITY_PUT]: entityPutReducer,
   [ENTITY_UPDATE]: entityUpdateReducer,
-  [ENTITY_DEL]: (state, { type, id }) => set(type, state, omit(state[type], id)),
+  [ENTITY_DEL]: entityDelReducer,
   [ENTITY_PUTALL]: entityPutAllReducer,
 }
 const reducer = createReducer(reducers)
