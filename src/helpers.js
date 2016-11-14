@@ -43,12 +43,13 @@ export function buildRef(result, val, predicate) {
 export function buildRefs(entity) {
   return reduce(entity, buildRef, {})
 }
+export const indexFields = { rangeIncludes: {}, [REF]: {}, [REFS]: {} }
+
 // Add fields required for save.
 export function insertFields(data = {}) {
   return {
     type: 'Thing',
-    rangeIncludes: {},
-    [REF]: {},
+    ...indexFields,
     ...buildRefs(data),
     dateCreated: data.dateCreated ? data.dateCreated : now(),
     id: data.id ? data.id : nextId(),
@@ -56,7 +57,7 @@ export function insertFields(data = {}) {
 }
 export function updateFields(data) {
   return {
-    ...insertFields(data),
+    ...buildRefs(data),
     dateModified: data.dateModified ? data.dateModified : now(),
   }
 }

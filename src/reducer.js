@@ -2,7 +2,7 @@ import { ary, get, isEmpty, omit, partialRight, reduce } from 'lodash'
 import { createReducer, merge, set, setIn } from 'cape-redux'
 
 import { ENTITY_DEL, ENTITY_PUT, ENTITY_PUTALL, ENTITY_UPDATE } from './actions'
-import { getKey, fullRefPath, getPath, setRangeIncludes, REF, pickTypeId } from './helpers'
+import { getKey, fullRefPath, getPath, setRangeIncludes, REF, REFS, pickTypeId } from './helpers'
 
 // Update `rangeIncludes` values on object entity.
 export function updateRefObjs(state, item) {
@@ -12,14 +12,28 @@ export function updateRefObjs(state, item) {
   const updateRange = partialRight(setRangeIncludes, subj, key)
   return reduce(item[REF], ary(updateRange, 3), state)
 }
-
+export function mergeIndexes(oldItem, item) {
+  if (!oldItem) return item
+  return {
+    ...item,
+    [REF]: merge(oldItem[REF], item[REF]),
+    [REFS]: merge(oldItem[REFS], item[REFS]),
+    rangeIncludes: merge(oldItem.rangeIncludes, item.rangeIncludes),
+  }
+}
 // Insert or replace entity.
 export function entityPutReducer(state, item) {
-  const newState = setIn(getPath(item), state, item)
-  return updateRefObjs(newState, item)
+  const path = getPath(item)
+  const node = mergeIndexes(get(state, path), item)
+  const newState = setIn(path, state, node)
+  return updateRefObjs(newState, node)
 }
+export function entityPutAllReducer(state, payload) {
+  return reduce(payload, entityPutReducer, state)
+}
+// An object node was updated. Update predicate values on subject.
 export function updateSubjRef(state, subj, predicate, obj) {
-  return setIn(fullRefPath(subj, predicate, obj), obj)
+  return setIn(fullRefPath(subj, predicate), state, obj)
 }
 // Update `_refs` values on subject entities.
 export function updateRangeSubjs(state, item) {
@@ -30,19 +44,19 @@ export function updateRangeSubjs(state, item) {
   }
   return reduce(item.rangeIncludes, updateSubj, state)
 }
-export function entityUpdateReducer(state, payload) {
-  const path = getPath(payload)
-  const oldItem = get(state, path, { [REF]: {} })
-  const item = merge(oldItem, payload, { [REF]: merge(oldItem[REF], payload[REF]) })
-  const newState = entityPutReducer(state, item)
-  return updateRangeSubjs(newState, item)
+export function entityUpdateReducer(state, item) {
+  const path = getPath(item)
+  const oldItem = get(state, path)
+  const newItem = mergeIndexes(oldItem, item)
+  const node = merge(oldItem, newItem)
+  const newState = setIn(path, state, node)
+  return updateRangeSubjs(updateRefObjs(newState, node), node)
 }
-
 export const reducers = {
   [ENTITY_PUT]: entityPutReducer,
   [ENTITY_UPDATE]: entityUpdateReducer,
   [ENTITY_DEL]: (state, { type, id }) => set(type, state, omit(state[type], id)),
-  [ENTITY_PUTALL]: (state, payload) => state.merge(payload),
+  [ENTITY_PUTALL]: entityPutAllReducer,
 }
 const reducer = createReducer(reducers)
 export default reducer

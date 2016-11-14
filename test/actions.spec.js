@@ -37,7 +37,7 @@ test('entityPutAll', (t) => {
 test('entityUpdate', (t) => {
   const act = entityUpdate(creator)
   t.equal(act.type, ENTITY_UPDATE)
-  t.ok(isNumber(act.payload.dateCreated))
+  t.false(isNumber(act.payload.dateCreated))
   t.ok(isNumber(act.payload.dateModified))
   t.end()
 })
