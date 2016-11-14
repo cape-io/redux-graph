@@ -3,7 +3,8 @@ import { pick } from 'lodash/fp'
 import { setIn } from 'cape-redux'
 import { isEntityCreated, getTripleError } from './lang'
 
-export const REF = '_refs'
+export const REF = '_ref'
+export const REFS = REF
 
 // Generate a new random key. Probably unique.
 export function nextId() {
@@ -23,18 +24,18 @@ export function getPath(item) {
   requireIdType(item, null, false)
   return [ item.type, item.id ]
 }
-export function getRefPath(predicate, obj, single = true) {
+export function getRefPath(predicate, obj) {
   if (!isString(predicate)) throw new Error('predicate must be a string.')
-  return single ? [ REF, predicate ] : [ REF, predicate, getKey(obj) ]
+  return !obj ? [ REF, predicate ] : [ REFS, predicate, getKey(obj) ]
 }
-export function fullRefPath(subj, predicate, obj, single = true) {
-  return getPath(subj).concat(getRefPath(predicate, obj, single))
+export function fullRefPath(subj, predicate, obj) {
+  return getPath(subj).concat(getRefPath(predicate, obj))
 }
 export function setRef(subject, predicate, obj) {
-  return setIn(getRefPath(predicate, obj), subject, pickTypeId(obj))
+  return setIn(getRefPath(predicate), subject, pickTypeId(obj))
 }
 export function buildRef(result, val, predicate) {
-  // Does not support merging of previously set REF field.
+  // Does not support merging previously set REF field.
   if (isEntityCreated(val)) return setRef(result, predicate, val)
   return set(result, predicate, val)
 }
@@ -75,7 +76,7 @@ export function buildTriple(triple) {
 }
 
 export function rangePath(obj, predicate, subj, subjKey) {
-  const key = subjKey ? subjKey : getKey(subj)
+  const key = subjKey || getKey(subj)
   return getPath(obj).concat([ 'rangeIncludes', predicate, key ])
 }
 export function setRangeIncludes(prevState, obj, predicate, subj, subjKey) {

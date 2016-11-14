@@ -33,7 +33,7 @@ export function updateRangeSubjs(state, item) {
 export function entityUpdateReducer(state, payload) {
   const path = getPath(payload)
   const oldItem = get(state, path, { [REF]: {} })
-  const item = merge(oldItem, { ...payload, [REF]: merge(oldItem[REF], payload[REF]) })
+  const item = merge(oldItem, payload, { [REF]: merge(oldItem[REF], payload[REF]) })
   const newState = entityPutReducer(state, item)
   return updateRangeSubjs(newState, item)
 }

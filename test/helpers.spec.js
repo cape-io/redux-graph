@@ -2,8 +2,8 @@ import test from 'tape'
 import { get, partial } from 'lodash'
 
 import {
-  buildRef, buildRefs, getKey, getPath, getRefPath, insertFields, nextId,
-  pickTypeId, rangePath, requireIdType, setRef, setRangeIncludes, validId,
+  buildRef, buildRefs, fullRefPath, getKey, getPath, getRefPath, insertFields, nextId,
+  pickTypeId, rangePath, REF, requireIdType, setRef, setRangeIncludes, validId,
 } from '../src'
 
 import { agent, creator, item, mainEntity } from './mock'
@@ -23,19 +23,26 @@ test('pickTypeId', (t) => {
   t.end()
 })
 test('getRefPath', (t) => {
-  t.deepEqual(getRefPath('creator', creator, false), [ '_refs', 'creator', 'Person_user0' ])
-  t.deepEqual(getRefPath('mainEntity', mainEntity), [ '_refs', 'mainEntity' ])
+  t.deepEqual(getRefPath('creator', creator), [ REF, 'creator', 'Person_user0' ])
+  t.deepEqual(getRefPath('mainEntity'), [ REF, 'mainEntity' ])
+  t.end()
+})
+test('fullRefPath', (t) => {
+  const path = fullRefPath(creator, 'art')
+  t.deepEqual(path, [ 'Person', 'user0', REF, 'art' ])
+  const path2 = fullRefPath(creator, 'art', item)
+  t.deepEqual(path2, [ 'Person', 'user0', REF, 'art', getKey(item) ])
   t.end()
 })
 test('setRef', (t) => {
   const ent1 = setRef({}, 'creator', creator)
-  t.equal(get(ent1, getRefPath('creator', creator).concat('id')), 'user0')
+  t.equal(get(ent1, getRefPath('creator').concat('id')), 'user0')
   t.end()
 })
 test('buildRef', (t) => {
   t.deepEqual(buildRef({}, false, 'isCandy'), { isCandy: false })
   t.deepEqual(buildRef({}, creator, 'creator'),
-    { _refs: { creator: { id: 'user0', type: 'Person' } } }
+    { [REF]: { creator: { id: 'user0', type: 'Person' } } }
   )
   t.end()
 })
@@ -43,7 +50,7 @@ test('buildRefs', (t) => {
   const entity = { candy: false, creator, item }
   t.deepEqual(buildRefs(entity), {
     candy: false,
-    _refs: {
+    [REF]: {
       creator: { id: 'user0', type: 'Person' },
       item: { id: 'i28z', type: 'Item', dateModified: item.dateModified },
     },
@@ -69,7 +76,7 @@ test('insertFields', (t) => {
   t.deepEqual(entity, {
     type: 'Thing',
     rangeIncludes: {},
-    _refs: {},
+    [REF]: {},
     dateCreated: entity.dateCreated,
     id: entity.id,
   })
@@ -78,7 +85,7 @@ test('insertFields', (t) => {
   ent2.creator = creator
   const ent3 = insertFields(ent2)
   t.deepEqual(ent3, {
-    ...entity, _refs: { creator: pickTypeId(creator) }, dateCreated: ent3.dateCreated,
+    ...entity, [REF]: { creator: pickTypeId(creator) }, dateCreated: ent3.dateCreated,
   })
   t.end()
 })
