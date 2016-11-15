@@ -1,10 +1,10 @@
 import { curry, get, isPlainObject, isString, now, pickBy, reduce, set } from 'lodash'
-import { pick } from 'lodash/fp'
+import { omit, pick } from 'lodash/fp'
 import { setIn } from 'cape-redux'
 import { isEntityCreated, getTripleError, isValidId, isValidType } from './lang'
 
 export const REF = '_ref'
-export const REFS = REF
+export const REFS = '_refs'
 
 // Generate a new random key. Probably unique.
 export function nextId() {
@@ -64,6 +64,7 @@ export function buildRefs(entity) {
   return reduce(entity, buildRef, {})
 }
 export const indexFields = { rangeIncludes: {}, [REF]: {}, [REFS]: {} }
+export const rmIndexFields = omit([ REF, REFS, 'rangeIncludes' ])
 
 // Add fields required for save.
 export function insertFields(data = {}) {

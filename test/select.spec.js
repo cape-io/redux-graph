@@ -2,7 +2,8 @@ import test from 'tape'
 import { isFunction } from 'lodash'
 
 import {
-  entitySelector, entityTypeSelector, requireIdType, selectGraph } from '../src'
+  entitySelector, entityTypeSelector, getGraphNode, requireIdType, selectGraph,
+} from '../src'
 import { agent, configStore } from './mock'
 
 const { getState } = configStore()
@@ -25,5 +26,9 @@ test('entitySelector', t => {
   t.ok(isFunction(selector), 'created selector is func')
   const found = selector(state)
   t.equal(found, state.graph.Person.ag12, 'selector finds correct node')
+  t.end()
+})
+test('getGraphNode', (t) => {
+  t.equal(getGraphNode(state.graph, { id: 'i28z', type: 'Item' }), state.graph.Item.i28z)
   t.end()
 })

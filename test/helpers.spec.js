@@ -4,7 +4,7 @@ import { every, get, partial, size } from 'lodash'
 import {
   buildRef, buildRefs, fullRefPath, getRef, getKey, getPath, getRefPath, hasPredicate,
   insertFields, nextId, predicateFilter, entityTypeSelector, isEntityCreatedDate,
-  pickTypeId, rangePath, REF, refMatch, requireIdType, setRef, setRangeIncludes, isValidId,
+  pickTypeId, rangePath, REF, REFS, refMatch, requireIdType, setRef, setRangeIncludes, isValidId,
 } from '../src'
 
 import { agent, configStore, creator, item, mainEntity } from './mock'
@@ -26,7 +26,7 @@ test('pickTypeId', (t) => {
   t.end()
 })
 test('getRefPath', (t) => {
-  t.deepEqual(getRefPath('creator', creator), [ REF, 'creator', 'Person_user0' ])
+  t.deepEqual(getRefPath('creator', creator), [ REFS, 'creator', 'Person_user0' ])
   t.deepEqual(getRefPath('mainEntity'), [ REF, 'mainEntity' ])
   t.end()
 })
@@ -34,7 +34,7 @@ test('fullRefPath', (t) => {
   const path = fullRefPath(creator, 'art')
   t.deepEqual(path, [ 'Person', 'user0', REF, 'art' ])
   const path2 = fullRefPath(creator, 'art', item)
-  t.deepEqual(path2, [ 'Person', 'user0', REF, 'art', getKey(item) ])
+  t.deepEqual(path2, [ 'Person', 'user0', REFS, 'art', getKey(item) ])
   t.end()
 })
 test('setRef', (t) => {
@@ -109,6 +109,7 @@ test('insertFields', (t) => {
     type: 'Thing',
     rangeIncludes: {},
     [REF]: {},
+    [REFS]: {},
     dateCreated: entity.dateCreated,
     id: entity.id,
   })
