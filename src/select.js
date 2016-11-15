@@ -26,7 +26,9 @@ export const getAllChildren = createSelector(selectGraph, nthArg(1), buildFullEn
 export function fullEntitySelector(customEntitySelector) {
   return state => getFullEntity(state, customEntitySelector(state))
 }
-
+export function allChildrenSelector(customEntitySelector) {
+  return state => getFullEntity(state, customEntitySelector(state))
+}
 export function filterEntity(type, predicate) {
   return createSelector(
     entityTypeSelector(type),
