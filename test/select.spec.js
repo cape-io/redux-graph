@@ -42,7 +42,7 @@ test('pickRefNodes', (t) => {
   t.end()
 })
 test('buildFullEntity', (t) => {
-  const res = buildFullEntity(state.graph.ListItem.li34, state.graph)
+  const res = buildFullEntity(false, state.graph, state.graph.ListItem.li34)
   t.deepEqual(res.agent, state.graph.Person.ag12, 'agent')
   t.deepEqual(res.item, state.graph.Item.i28z, 'item')
   t.end()
