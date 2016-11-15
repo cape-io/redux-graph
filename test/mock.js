@@ -47,8 +47,12 @@ export const listItem = {
 const reducer = combineReducers({
   graph,
 })
+export const listItem2 = {
+  ...listItem,
+  agent: creator,
+}
 export function configStore() {
   const store = createStore(reducer)
-  store.dispatch(entityPutAll([ agent, item, creator ]))
+  store.dispatch(entityPutAll([ agent, item, creator, listItem, listItem, listItem2 ]))
   return store
 }

@@ -1,12 +1,15 @@
 import test from 'tape'
-import { get, partial } from 'lodash'
+import { every, get, partial, size } from 'lodash'
 
 import {
-  buildRef, buildRefs, fullRefPath, getKey, getPath, getRefPath, insertFields, nextId,
-  pickTypeId, rangePath, REF, requireIdType, setRef, setRangeIncludes, isValidId,
+  buildRef, buildRefs, fullRefPath, getRef, getKey, getPath, getRefPath, hasPredicate,
+  insertFields, nextId, predicateFilter, entityTypeSelector, isEntityCreatedDate,
+  pickTypeId, rangePath, REF, refMatch, requireIdType, setRef, setRangeIncludes, isValidId,
 } from '../src'
 
-import { agent, creator, item, mainEntity } from './mock'
+import { agent, configStore, creator, item, mainEntity } from './mock'
+
+const { getState } = configStore()
 
 test('nextId', (t) => {
   t.ok(isValidId(nextId()))
@@ -44,6 +47,35 @@ test('buildRef', (t) => {
   t.deepEqual(buildRef({}, creator, 'creator'),
     { [REF]: { creator: { id: 'user0', type: 'Person' } } }
   )
+  t.end()
+})
+test('getRef', (t) => {
+  t.equal(getRef({ [REF]: { creator }, name: 'Emi' }, 'creator'), creator)
+  t.equal(getRef({ [REF]: { creator }, name: 'Emi' }, 'friend'), undefined)
+  t.end()
+})
+test('refMatch', (t) => {
+  t.true(refMatch({ id: 'any', type: 'thing', name: 'foo' }, { id: 'any', type: 'thing' }))
+  t.false(refMatch({ id: 'any', type: 'thing', name: 'foo' }, { id: 'any', type: 'touch' }))
+  t.end()
+})
+test('hasPredicate', (t) => {
+  const checker = hasPredicate('creator', creator)
+  t.true(checker({ [REF]: { creator }, name: 'Emi' }))
+  t.false(checker({ [REF]: { friend: creator }, name: 'Emi' }))
+  t.end()
+})
+test('predicateFilter', (t) => {
+  const items = entityTypeSelector('ListItem')(getState())
+  const agentItems = predicateFilter('agent', agent, items)
+  t.ok(every(agentItems, isEntityCreatedDate))
+  t.equal(size(agentItems), 2)
+  const withItem = predicateFilter('item', item, items)
+  t.ok(every(withItem, isEntityCreatedDate))
+  t.equal(size(withItem), 3)
+  const creatorItems = predicateFilter('agent', creator, items)
+  t.ok(every(creatorItems, isEntityCreatedDate))
+  t.equal(size(creatorItems), 1)
   t.end()
 })
 test('buildRefs', (t) => {

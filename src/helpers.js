@@ -1,4 +1,4 @@
-import { isPlainObject, isString, now, reduce, set } from 'lodash'
+import { curry, get, isPlainObject, isString, now, pickBy, reduce, set } from 'lodash'
 import { pick } from 'lodash/fp'
 import { setIn } from 'cape-redux'
 import { isEntityCreated, getTripleError, isValidId, isValidType } from './lang'
@@ -41,6 +41,24 @@ export function buildRef(result, val, predicate) {
   if (isEntityCreated(val)) return setRef(result, predicate, val)
   return set(result, predicate, val)
 }
+// Get predicate from an entity.
+export function getRef(node, predicate) {
+  if (!isString(predicate)) throw new Error('getRef() predicate must be a string.')
+  return get(node, [ REF, predicate ])
+}
+export function getRefs(node, predicate) {
+  return get(node, [ REFS, predicate ])
+}
+// First is the object you are looking for.
+export const refMatch = curry((ref, obj) =>
+  obj && obj.id === ref.id && obj.type === ref.type
+)
+export const hasPredicate = curry((predicate, subject, node) =>
+  refMatch(subject, getRef(node, predicate))
+)
+export const predicateFilter = curry((predicate, obj, collection) =>
+  pickBy(collection, hasPredicate(predicate, obj))
+)
 // Split out triple refs because the need to be handled in the reducer.
 export function buildRefs(entity) {
   return reduce(entity, buildRef, {})
