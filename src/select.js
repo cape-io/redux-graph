@@ -4,8 +4,9 @@ import { createSelector } from 'reselect'
 import { select } from 'cape-select'
 import { getPath, REF, REFS, rmRefs } from './helpers'
 
+export const GRAPH_KEY = 'graph2'
 const fpSelect = curry(select, 2)
-export const selectGraph = property('graph')
+export const selectGraph = property(GRAPH_KEY)
 export const entityTypeSelector = fpSelect(selectGraph)
 export const entitySelector = flow(getPath, fpSelect(selectGraph))
 export const getEntity = curry((state, entity) => entitySelector(entity)(state))

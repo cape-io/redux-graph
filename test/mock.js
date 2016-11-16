@@ -46,7 +46,7 @@ export const listItem = {
   type: 'ListItem',
 }
 const reducer = combineReducers({
-  graph,
+  graph2: graph,
 })
 export const listItem2 = {
   ...listItem,
