@@ -48,7 +48,8 @@ test('buildFullEntity', (t) => {
   const res = buildFullEntity(false, ste.graph, ste.graph.ListItem.li34)
   t.deepEqual(res.agent, ste.graph.Person.ag12, 'agent')
   t.deepEqual(res.item, ste.graph.Item.i28z, 'item')
-  t.deepEqual(res.likes.DataFeed_pBlf, ste.graph.DataFeed.pBlf)
+  t.equal(res.likes.DataFeed_pBlf.dog.id, 'dgo14')
+  // console.log(res.likes.DataFeed_pBlf)
   t.end()
 })
 test('getFullEntity', (t) => {

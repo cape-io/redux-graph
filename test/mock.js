@@ -2,7 +2,8 @@ import { now } from 'lodash'
 import { combineReducers, createStore } from 'redux'
 import graph, { entityPutAll } from '../src'
 
-export const mainEntity = { id: 'pBlf', type: 'DataFeed' }
+export const fido = { id: 'dgo14', type: 'Animal', name: 'fido' }
+export const mainEntity = { id: 'pBlf', type: 'DataFeed', dog: fido }
 export const agent = { id: 'ag12', type: 'Person', name: 'Silly Sam' }
 export const creator = {
   id: 'user0',
@@ -58,7 +59,7 @@ export const li34 = {
 export function configStore() {
   const store = createStore(reducer)
   store.dispatch(entityPutAll([
-    agent, item, creator, listItem, listItem, listItem2, li34, mainEntity,
+    agent, item, creator, listItem, listItem, listItem2, li34, mainEntity, fido,
   ]))
   return store
 }

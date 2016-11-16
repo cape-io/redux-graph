@@ -17,7 +17,10 @@ export function getKey({ type, id }) {
 export const pickTypeId = pick([ 'dateModified', 'id', 'type' ])
 export function requireIdType(props, typeId = null, doPick = true) {
   if (!isPlainObject(props)) throw new Error('Must pass an object.')
-  if (!isValidType(props.type)) throw new Error('Must have a valid type.')
+  if (!isValidType(props.type)) {
+    console.error(props)
+    throw new Error('Must have a valid type.')
+  }
   if (!isValidId(props.id)) throw new Error('Must have a valid id.')
   if (typeId && props.type !== typeId) throw new Error('Wrong entity type.')
   return doPick ? pickTypeId(props) : null

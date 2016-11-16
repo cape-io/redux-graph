@@ -1,5 +1,5 @@
 import test from 'tape'
-import { isArray, isMatch, isNumber } from 'lodash'
+import { isArray, isMatch, isNumber, omit } from 'lodash'
 import {
   entityDel, ENTITY_DEL, entityPut, ENTITY_PUT, entityPutAll, ENTITY_PUTALL,
   entityUpdate, ENTITY_UPDATE, pickTypeId, triplePut, TRIPLE_PUT,
@@ -31,7 +31,7 @@ test('entityPutAll', (t) => {
   t.ok(isNumber(act.payload[2].dateCreated))
   t.ok(isMatch(act.payload[2], item))
   t.ok(isNumber(act.payload[3].dateCreated))
-  t.ok(isMatch(act.payload[3], mainEntity))
+  t.ok(isMatch(act.payload[3], omit(mainEntity, 'dog')))
   t.end()
 })
 test('entityUpdate', (t) => {
