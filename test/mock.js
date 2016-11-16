@@ -51,12 +51,14 @@ export const listItem2 = {
   ...listItem,
   agent: creator,
 }
-export const li3 = {
+export const li34 = {
   ...listItem,
   id: 'li34',
 }
 export function configStore() {
   const store = createStore(reducer)
-  store.dispatch(entityPutAll([ agent, item, creator, listItem, listItem, listItem2, li3 ]))
+  store.dispatch(entityPutAll([
+    agent, item, creator, listItem, listItem, listItem2, li34, mainEntity,
+  ]))
   return store
 }

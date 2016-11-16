@@ -36,6 +36,9 @@ export function fullRefPath(subj, predicate, obj) {
 export function setRef(subject, predicate, obj) {
   return setIn(getRefPath(predicate), subject, pickTypeId(obj))
 }
+export function setRefs(subject, predicate, obj) {
+  return setIn(getRefPath(predicate, obj), subject, pickTypeId(obj))
+}
 export function buildRef(result, val, predicate) {
   // Does not support merging previously set REF field.
   if (isEntityCreated(val)) return setRef(result, predicate, val)
@@ -64,7 +67,7 @@ export function buildRefs(entity) {
   return reduce(entity, buildRef, {})
 }
 export const indexFields = { rangeIncludes: {}, [REF]: {}, [REFS]: {} }
-export const rmIndexFields = omit([ REF, REFS, 'rangeIncludes' ])
+export const rmRefs = omit([ REF, REFS ])
 
 // Add fields required for save.
 export function insertFields(data = {}) {

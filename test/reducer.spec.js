@@ -1,8 +1,8 @@
 import test from 'tape'
-import { isNumber } from 'lodash'
-import { insertFields, updateFields, REF } from '../src'
+import { isNumber, isMatch } from 'lodash'
+import { getKey, insertFields, updateFields, REF, REFS } from '../src'
 import {
-  entityUpdateReducer, entityPutReducer, entityPutAllReducer, updateSubjRef,
+  entityUpdateReducer, entityPutReducer, entityPutAllReducer, triplePutReducer, updateSubjRef,
 } from '../src/reducer'
 import { agent, collection, creator, item } from './mock'
 
@@ -29,12 +29,12 @@ test('updateSubjRef', (t) => {
   t.equal(res.Person[agent.id][REF].friend, obj)
   t.end()
 })
+const payload = [
+  insertFields({ ...creator, friend: agent, art: item }),
+  insertFields(collection),
+]
+const state = entityPutAllReducer({}, payload)
 test('entityUpdate', (t) => {
-  const payload = [
-    insertFields({ ...creator, friend: agent, art: item }),
-    insertFields(collection),
-  ]
-  const state = entityPutAllReducer({}, payload)
   t.false(state.Item.i28z.rangeIncludes.art.Person_user0.dateModified)
   t.false(state.Person.ag12.rangeIncludes.friend.Person_user0.dateModified)
   // console.log(JSON.stringify(state, true, 2))
@@ -50,5 +50,13 @@ test('entityUpdate', (t) => {
   t.ok(isNumber(st2.Item.i28z.rangeIncludes.art.Person_user0.dateModified), 'art.Person_user0 dM')
   t.ok(isNumber(st2.Person.ag12.rangeIncludes.friend.Person_user0.dateModified), 'friend dM')
   t.ok(isNumber(st2.CollectionList[payload[1].id][REF].creator.dateModified), 'collection creator')
+  t.end()
+})
+test('triplePutReducer', (t) => {
+  const person = state.Person[creator.id]
+  const st1 = triplePutReducer(state, { subject: creator, predicate: 'friends', object: agent })
+  t.ok(isMatch(agent, st1.Person[creator.id][REFS].friends[getKey(agent)]))
+  t.equal(st1.Person[creator.id].name, creator.name)
+  t.equal(person[REF], st1.Person[creator.id][REF])
   t.end()
 })

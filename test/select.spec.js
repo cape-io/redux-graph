@@ -4,10 +4,11 @@ import { isFunction, size } from 'lodash'
 import {
   buildFullEntity, getFullEntity, fullEntitySelector,
   entitySelector, entityTypeSelector, getGraphNode, pickRefNodes, requireIdType, selectGraph,
+  triplePut,
 } from '../src'
-import { agent, configStore } from './mock'
+import { agent, configStore, li34, mainEntity } from './mock'
 
-const { getState } = configStore()
+const { dispatch, getState } = configStore()
 
 const state = getState()
 test('selectGraph', (t) => {
@@ -35,16 +36,19 @@ test('getGraphNode', (t) => {
 })
 test('pickRefNodes', (t) => {
   const refs = { item: { id: 'i28z', type: 'Item' }, friend: { id: 'ag12', type: 'Person' } }
-  const res = pickRefNodes(refs, state.graph)
+  const res = pickRefNodes(false, state.graph, refs)
   t.equal(size(res), 2, 'size')
   t.equal(res.item, state.graph.Item.i28z, 'item')
   t.equal(res.friend, state.graph.Person.ag12, 'friend')
   t.end()
 })
 test('buildFullEntity', (t) => {
-  const res = buildFullEntity(false, state.graph, state.graph.ListItem.li34)
-  t.deepEqual(res.agent, state.graph.Person.ag12, 'agent')
-  t.deepEqual(res.item, state.graph.Item.i28z, 'item')
+  dispatch(triplePut({ subject: li34, predicate: 'likes', object: mainEntity }))
+  const ste = getState()
+  const res = buildFullEntity(false, ste.graph, ste.graph.ListItem.li34)
+  t.deepEqual(res.agent, ste.graph.Person.ag12, 'agent')
+  t.deepEqual(res.item, ste.graph.Item.i28z, 'item')
+  t.deepEqual(res.likes.DataFeed_pBlf, ste.graph.DataFeed.pBlf)
   t.end()
 })
 test('getFullEntity', (t) => {

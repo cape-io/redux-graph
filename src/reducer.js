@@ -1,9 +1,9 @@
 import { ary, get, isEmpty, omit, partialRight, reduce } from 'lodash'
 import { createReducer, merge, setIn } from 'cape-redux'
 
-import { ENTITY_DEL, ENTITY_PUT, ENTITY_PUTALL, ENTITY_UPDATE } from './actions'
+import { ENTITY_DEL, ENTITY_PUT, ENTITY_PUTALL, ENTITY_UPDATE, TRIPLE_PUT } from './actions'
 import {
-  getKey, fullRefPath, getPath, setRangeIncludes, rangePath, REF, REFS, pickTypeId,
+  getKey, fullRefPath, getPath, setRangeIncludes, rangePath, REF, REFS, pickTypeId, setRefs,
 } from './helpers'
 
 // Update `rangeIncludes` values on object entity.
@@ -69,11 +69,16 @@ export function delRanges(state, item) {
 export function entityDelReducer(state, item) {
   return delAt(getPath(item), state)
 }
+export function triplePutReducer(state, { subject, predicate, object }) {
+  const path = getPath(subject)
+  return setIn(path, state, setRefs(get(state, path), predicate, object))
+}
 export const reducers = {
   [ENTITY_PUT]: entityPutReducer,
   [ENTITY_UPDATE]: entityUpdateReducer,
   [ENTITY_DEL]: entityDelReducer,
   [ENTITY_PUTALL]: entityPutAllReducer,
+  [TRIPLE_PUT]: triplePutReducer,
 }
 const reducer = createReducer(reducers)
 export default reducer
