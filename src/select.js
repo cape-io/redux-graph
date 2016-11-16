@@ -17,7 +17,7 @@ export const pickRefNodes = curry((deep, graph, refs) => {
 })
 // Get one level of REF fields.
 export const buildFullEntity = curry((deep, graph, node) => {
-  if (isEmpty(node[REF]) && isEmpty(node[REFS])) return rmRefs(node)
+  if (!node || (isEmpty(node[REF]) && isEmpty(node[REFS]))) return rmRefs(node)
   function getPredRefs(predRefs) {
     return mapValues(predRefs, flow(getGraphNode(graph), buildFullEntity(deep, graph)))
   }
