@@ -7,6 +7,7 @@ export const entityDel = createAction(ENTITY_DEL, requireIdType)
 
 export const ENTITY_PUT = 'graph/ENTITY_PUT'
 export const entityPut = createAction(ENTITY_PUT, insertFields)
+export const entityPutRaw = createAction(ENTITY_PUT)
 
 export const ENTITY_PUTALL = 'graph/ENTITY_PUTALL'
 export const entityPutAll = createAction(ENTITY_PUTALL, values => {
