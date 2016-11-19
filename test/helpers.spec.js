@@ -1,10 +1,11 @@
 import test from 'tape'
-import { every, get, partial, size } from 'lodash'
+import { every, get, isFunction, partial, size } from 'lodash'
 
 import {
   buildRef, buildRefs, fullRefPath, getRef, getKey, getPath, getRefPath, hasPredicate,
   insertFields, nextId, predicateFilter, entityTypeSelector, isEntityCreatedDate,
   pickTypeId, rangePath, REF, REFS, refMatch, requireIdType, setRef, setRangeIncludes, isValidId,
+  entityMatch, entityMatches,
 } from '../src'
 
 import { agent, configStore, creator, item, mainEntity } from './mock'
@@ -139,5 +140,34 @@ test('setRangeIncludes', (t) => {
     },
   }
   t.deepEqual(state, expect)
+  t.end()
+})
+test('entityMatch', (t) => {
+  t.true(entityMatch(
+    { id: 'foo1', type: 'Person', name: 'liz' },
+    { id: 'foo1', type: 'Person', name: 'cam' }
+  ))
+  t.false(entityMatch(
+    { id: 'foo1', type: 'person', name: 'liz' },
+    { id: 'foo1', type: 'person', name: 'cam' }
+  ))
+  t.false(entityMatch(
+    { id: 'foo2', type: 'Person', name: 'liz' },
+    { id: 'foo1', type: 'Person', name: 'liz' }
+  ))
+  t.false(entityMatch(
+    { id: 'foo1', type: 'Person', name: 'liz' },
+    { id: 'foo1', type: 'Thing', name: 'cam' }
+  ))
+  t.end()
+})
+test('entityMatches', (t) => {
+  const ent = { id: 'foo1', type: 'Person', name: 'liz' }
+  t.true(entityMatches(ent)({ id: 'foo1', type: 'Person' }))
+  const matches = entityMatches(ent)
+  t.true(isFunction(matches))
+  t.true(matches(ent))
+  t.false(matches(null))
+  t.false(matches({ id: 'foo2', type: 'Person' }, { id: 'foo2', type: 'Person' }))
   t.end()
 })

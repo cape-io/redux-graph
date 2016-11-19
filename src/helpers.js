@@ -1,4 +1,6 @@
-import { curry, get, isPlainObject, isString, now, pickBy, reduce, set } from 'lodash'
+import {
+  ary, curry, get, isPlainObject, isString, now, partialRight, pickBy, rearg, reduce, set,
+} from 'lodash'
 import { omit, pick } from 'lodash/fp'
 import { setIn } from 'cape-redux'
 import { isEntityCreated, getTripleError, isValidId, isValidType } from './lang'
@@ -52,6 +54,7 @@ export function getRef(node, predicate) {
   if (!isString(predicate)) throw new Error('getRef() predicate must be a string.')
   return get(node, [ REF, predicate ])
 }
+export const fpGetRef = curry(rearg(getRef, [ 1, 0 ]), 2)
 export function getRefs(node, predicate) {
   return get(node, [ REFS, predicate ])
 }
@@ -110,3 +113,8 @@ export function rangePath(obj, predicate, subj, subjKey) {
 export function setRangeIncludes(prevState, obj, predicate, subj, subjKey) {
   return setIn(rangePath(obj, predicate, subj, subjKey), prevState, subj)
 }
+export function entityMatch(object, source) {
+  if (!isEntityCreated(object) || !isEntityCreated(source)) return false
+  return object.id === source.id && object.type === source.type
+}
+export function entityMatches(source) { return ary(partialRight(entityMatch, source), 1) }
