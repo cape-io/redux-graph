@@ -48,3 +48,5 @@ const store = createStore(reducer)
 * `insertFields()` add fields (id and dateCreate) required for save.
 * `rebuildEntity()` adds predicate fields and entity references back into a single object.
 * `entityDomainIncludes()` adds `domainIncludes` property to entity that includes entities that reference it.
+* `entityMatch(object, source)` Only checks that object and source have same `id` and `type` prop values.
+* `entityMatches(source)(object)` Define source first.
