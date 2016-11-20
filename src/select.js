@@ -13,7 +13,7 @@ export const getEntity = curry((state, entity) => entitySelector(entity)(state))
 
 export const getGraphNode = curry((graph, node) => get(graph, getPath(node), node))
 export const pickRefNodes = curry((deep, graph, refs) => {
-  if (deep) return mapValues(refs, flow(getGraphNode(graph), buildFullEntity(deep, graph))) // eslint-disable-line
+  if (deep) return mapValues(refs, flow(getGraphNode(graph), buildFullEntity(deep - 1, graph))) // eslint-disable-line
   return mapValues(refs, getGraphNode(graph))
 })
 // Get one level of REF fields.
@@ -29,8 +29,8 @@ export const buildFullEntity = curry((deep, graph, node) => {
   )
 })
 // (state, entityObj) simpleSelector
-export const getFullEntity = createSelector(selectGraph, nthArg(1), buildFullEntity(false))
-export const getAllChildren = createSelector(selectGraph, nthArg(1), buildFullEntity(true))
+export const getFullEntity = createSelector(selectGraph, nthArg(1), buildFullEntity(0))
+export const getAllChildren = createSelector(selectGraph, nthArg(1), buildFullEntity(7))
 export function fullEntitySelector(customEntitySelector) {
   return simpleSelector(nthArg(0), customEntitySelector, getFullEntity)
 }

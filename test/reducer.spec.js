@@ -2,7 +2,7 @@ import test from 'tape'
 import { isNumber, isMatch } from 'lodash'
 import { getKey, insertFields, updateFields, REF, REFS } from '../src'
 import {
-  entityUpdateReducer, entityPutReducer, entityPutAllReducer, triplePutReducer, updateSubjRef,
+  entityUpdateReducer, entityPutReducer, entityPutAllReducer, putRefs, updateSubjRef,
 } from '../src/reducer'
 import { agent, collection, creator, item } from './mock'
 
@@ -52,9 +52,9 @@ test('entityUpdate', (t) => {
   t.ok(isNumber(st2.CollectionList[payload[1].id][REF].creator.dateModified), 'collection creator')
   t.end()
 })
-test('triplePutReducer', (t) => {
+test('putRefs', (t) => {
   const person = state.Person[creator.id]
-  const st1 = triplePutReducer(state, { subject: creator, predicate: 'friends', object: agent })
+  const st1 = putRefs(state, { subject: creator, predicate: 'friends', object: agent })
   t.ok(isMatch(agent, st1.Person[creator.id][REFS].friends[getKey(agent)]))
   t.equal(st1.Person[creator.id].name, creator.name)
   t.equal(person[REF], st1.Person[creator.id][REF])

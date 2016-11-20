@@ -3,7 +3,7 @@ import { createReducer, merge, setIn } from 'cape-redux'
 
 import { ENTITY_DEL, ENTITY_PUT, ENTITY_PUTALL, ENTITY_UPDATE, TRIPLE_PUT } from './actions'
 import {
-  getKey, fullRefPath, getPath, setRangeIncludes, rangePath, REF, REFS, pickTypeId, setRefs,
+  getKey, fullRefPath, getPath, setRangeIncludes, rangePath, REF, REFS, pickTypeId,
 } from './helpers'
 
 // Update `rangeIncludes` values on object entity.
@@ -69,16 +69,20 @@ export function delRanges(state, item) {
 export function entityDelReducer(state, item) {
   return delAt(getPath(item), state)
 }
-export function triplePutReducer(state, { subject, predicate, object }) {
-  const path = getPath(subject)
-  return setIn(path, state, setRefs(get(state, path), predicate, object))
+export function putRefs(state, { subject, predicate, object }) {
+  return setIn(fullRefPath(subject, predicate, object), state, object)
 }
+export function putRef(state, { subject, predicate, object }) {
+  return setIn(fullRefPath(subject, predicate), state, object)
+}
+
 export const reducers = {
   [ENTITY_PUT]: entityPutReducer,
   [ENTITY_UPDATE]: entityUpdateReducer,
   [ENTITY_DEL]: entityDelReducer,
   [ENTITY_PUTALL]: entityPutAllReducer,
-  [TRIPLE_PUT]: triplePutReducer,
+  // [REF_PUT]: refPut,
+  [TRIPLE_PUT]: putRefs,
 }
 const reducer = createReducer(reducers)
 export default reducer
