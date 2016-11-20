@@ -1,12 +1,12 @@
 import test from 'tape'
-import { isFunction, size } from 'lodash'
+import { isFunction, property, size } from 'lodash'
 
 import {
   buildFullEntity, getFullEntity, fullEntitySelector,
   entitySelector, entityTypeSelector, getGraphNode, pickRefNodes, requireIdType, selectGraph,
-  triplePut, GRAPH_KEY,
+  triplePut, GRAPH_KEY, getAllChildren, allChildrenSelector,
 } from '../src'
-import { agent, configStore, li34, mainEntity } from './mock'
+import { agent, creator, configStore, fido, li34, mainEntity } from './mock'
 
 const { dispatch, getState } = configStore()
 
@@ -53,11 +53,31 @@ test('buildFullEntity', (t) => {
   t.end()
 })
 test('getFullEntity', (t) => {
-  const res = getFullEntity(state, state[GRAPH_KEY].ListItem.li34)
-  t.deepEqual(res.agent, state[GRAPH_KEY].Person.ag12, 'agent')
-  t.deepEqual(res.item, state[GRAPH_KEY].Item.i28z, 'item')
-  const res2 = getFullEntity(state, state[GRAPH_KEY].ListItem.li34)
+  const ste = getState()
+  const res = getFullEntity(ste, ste[GRAPH_KEY].ListItem.li34)
+  // console.log(ste[GRAPH_KEY].ListItem.li34)
+  // console.log(res)
+  t.deepEqual(res.agent, ste[GRAPH_KEY].Person.ag12, 'agent')
+  t.deepEqual(res.item, ste[GRAPH_KEY].Item.i28z, 'item')
+  t.deepEqual(res.likes.DataFeed_pBlf.dog, ste[GRAPH_KEY].Animal.dgo14, 'likes dog')
+  const res2 = getFullEntity(ste, ste[GRAPH_KEY].ListItem.li34)
   t.equal(res, res2)
+  t.end()
+})
+test('getAllChildren', (t) => {
+  dispatch(triplePut({ subject: fido, predicate: 'friend', object: creator }))
+  const ste = getState()
+  const res = getAllChildren(ste, ste[GRAPH_KEY].ListItem.li34)
+  t.equal(res.likes.DataFeed_pBlf.dog.friend.Person_user0.id, 'user0')
+  // console.log(JSON.stringify(res, null, 2))
+  t.end()
+})
+test('allChildrenSelector', (t) => {
+  const customEntitySelector = property([ GRAPH_KEY, 'ListItem', 'li34' ])
+  const selector = allChildrenSelector(customEntitySelector)
+  const res = selector(getState())
+  // console.log(JSON.stringify(res, null, 2))
+  t.equal(res.likes.DataFeed_pBlf.dog.friend.Person_user0.id, 'user0')
   t.end()
 })
 test('fullEntitySelector', (t) => {
