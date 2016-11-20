@@ -70,7 +70,8 @@ export function entityDelReducer(state, item) {
   return delAt(getPath(item), state)
 }
 export function putRefs(state, { subject, predicate, object }) {
-  return setIn(fullRefPath(subject, predicate, object), state, object)
+  const ste1 = setIn(fullRefPath(subject, predicate, object), state, object)
+  return setRangeIncludes(ste1, object, predicate, subject)
 }
 export function putRef(state, { subject, predicate, object }) {
   return setIn(fullRefPath(subject, predicate), state, object)

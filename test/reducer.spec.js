@@ -58,5 +58,6 @@ test('putRefs', (t) => {
   t.ok(isMatch(agent, st1.Person[creator.id][REFS].friends[getKey(agent)]))
   t.equal(st1.Person[creator.id].name, creator.name)
   t.equal(person[REF], st1.Person[creator.id][REF])
+  t.equal(st1.Person[agent.id].rangeIncludes.friends[getKey(creator)].id, creator.id)
   t.end()
 })
