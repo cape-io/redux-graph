@@ -1,7 +1,7 @@
 import { curry, filter, flow, get, isEmpty, mapValues, merge, nthArg, property } from 'lodash'
 // import { condId, overBranch } from 'cape-lodash'
 import { createSelector } from 'reselect'
-import { select } from 'cape-select'
+import { select, simpleSelector } from 'cape-select'
 import { getPath, REF, REFS, rmRefs } from './helpers'
 
 export const GRAPH_KEY = 'graph2'
@@ -32,11 +32,12 @@ export const buildFullEntity = curry((deep, graph, node) => {
 export const getFullEntity = createSelector(selectGraph, nthArg(1), buildFullEntity(false))
 export const getAllChildren = createSelector(selectGraph, nthArg(1), buildFullEntity(true))
 export function fullEntitySelector(customEntitySelector) {
-  return state => getFullEntity(state, customEntitySelector(state))
+  return simpleSelector(nthArg(0), customEntitySelector, getFullEntity)
 }
 export function allChildrenSelector(customEntitySelector) {
-  return state => getFullEntity(state, customEntitySelector(state))
+  return simpleSelector(nthArg(0), customEntitySelector, getAllChildren)
 }
+
 export function filterEntity(type, predicate) {
   return createSelector(
     entityTypeSelector(type),

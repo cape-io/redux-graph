@@ -1,6 +1,6 @@
 {
   "name": "@kaicurry/redux-graph",
-  "version": "2.6.0",
+  "version": "2.6.1",
   "description": "Redux graph database.",
   "homepage": "https://github.com/cape-io/redux-graph",
   "author": "Kai Curry <kai@cape.io> (http://www.cape.io/)",

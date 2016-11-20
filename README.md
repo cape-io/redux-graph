@@ -34,6 +34,7 @@ const store = createStore(reducer)
 ## Selectors
 
 * entitySelector
+* `entityTypeSelector('Person')`
 
 ## Helper functions.
 
