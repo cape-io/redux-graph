@@ -21,12 +21,14 @@ test('entityPutReducer', (t) => {
   t.end()
 })
 test('updateSubjRef', (t) => {
-  const state = {}
+  const state = { Person: { [agent.id]: { [REF]: { friend: {} } } } }
   const predicate = 'friend'
   const subj = agent
   const obj = creator
   const res = updateSubjRef(state, subj, predicate, obj)
   t.equal(res.Person[agent.id][REF].friend, obj)
+  const res2 = updateSubjRef({}, subj, predicate, obj)
+  t.equal(res2.Person[agent.id][REFS].friend[getKey(obj)], obj)
   t.end()
 })
 const payload = [
@@ -34,7 +36,7 @@ const payload = [
   insertFields(collection),
 ]
 const state = entityPutAllReducer({}, payload)
-test('entityUpdate', (t) => {
+test('entityUpdateReducer', (t) => {
   t.false(state.Item.i28z.rangeIncludes.art.Person_user0.dateModified)
   t.false(state.Person.ag12.rangeIncludes.friend.Person_user0.dateModified)
   // console.log(JSON.stringify(state, true, 2))
@@ -59,5 +61,10 @@ test('putRefs', (t) => {
   t.equal(st1.Person[creator.id].name, creator.name)
   t.equal(person[REF], st1.Person[creator.id][REF])
   t.equal(st1.Person[agent.id].rangeIncludes.friends[getKey(creator)].id, creator.id)
+  const pay2 = updateFields({ id: creator.id, type: creator.type, foo: 'bar21' })
+  const st2 = entityUpdateReducer(st1, pay2)
+  t.equal(st2.Person[creator.id].foo, 'bar21')
+  t.deepEqual(st2.Person[creator.id][REF], st1.Person[creator.id][REF])
+  t.deepEqual(st2.Person[creator.id][REFS], st1.Person[creator.id][REFS])
   t.end()
 })

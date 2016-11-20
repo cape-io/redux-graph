@@ -35,7 +35,10 @@ export function entityPutAllReducer(state, payload) {
 }
 // An object node was updated. Update predicate values on subject.
 export function updateSubjRef(state, subj, predicate, obj) {
-  return setIn(fullRefPath(subj, predicate), state, obj)
+  const refPath = fullRefPath(subj, predicate)
+  if (get(state, refPath)) return setIn(refPath, state, obj)
+  const refsPath = fullRefPath(subj, predicate, obj)
+  return setIn(refsPath, state, obj)
 }
 // Update `_refs` values on subject entities.
 export function updateRangeSubjs(state, item) {
