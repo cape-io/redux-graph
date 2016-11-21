@@ -966,7 +966,7 @@ camelcase@^1.0.2:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/camelcase/-/camelcase-1.2.1.tgz#9bb5304d2e0b56698b2c758b08a3eaa9daa58a39"
 
-cape-lodash@^1.0.0, cape-lodash@^1.7.0:
+cape-lodash@^1.7.0:
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/cape-lodash/-/cape-lodash-1.7.0.tgz#e4988077ed4cf8d3f21f62a0a1ff09828e6bd01f"
   dependencies:
@@ -981,12 +981,12 @@ cape-redux@^2.2.1:
     redux "^3.6.0"
     seamless-immutable "^6.3.0"
 
-cape-select@^2.3.0:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/cape-select/-/cape-select-2.3.0.tgz#5ab320c3bea615893739de7e6826cc921164da07"
+cape-select@^2.3.1:
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/cape-select/-/cape-select-2.3.1.tgz#d86e2ead0be1ea03b3525712b91eb3373e61c6bd"
   dependencies:
-    cape-lodash "^1.0.0"
-    lodash "^4.15.0"
+    cape-lodash "^1.7.0"
+    lodash "^4.17.2"
 
 caseless@~0.11.0:
   version "0.11.0"
@@ -2219,7 +2219,7 @@ lodash.pickby@^4.6.0:
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/lodash.pickby/-/lodash.pickby-4.6.0.tgz#7dea21d8c18d7703a27c704c15d3b84a67e33aff"
 
-lodash@^4.0.0, lodash@^4.15.0, lodash@^4.16.6, lodash@^4.17.2, lodash@^4.2.0, lodash@^4.2.1, lodash@^4.3.0, lodash@^4.6.1:
+lodash@^4.0.0, lodash@^4.16.6, lodash@^4.17.2, lodash@^4.2.0, lodash@^4.2.1, lodash@^4.3.0, lodash@^4.6.1:
   version "4.17.2"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.2.tgz#34a3055babe04ce42467b607d700072c7ff6bf42"
 
