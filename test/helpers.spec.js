@@ -48,6 +48,15 @@ test('buildRef', (t) => {
   t.deepEqual(buildRef({}, creator, 'creator'),
     { [REF]: { creator: { id: 'user0', type: 'Person' } } }
   )
+  t.deepEqual(buildRef({}, [ creator ], 'creator'),
+    { [REFS]: { creator: { Person_user0: { id: 'user0', type: 'Person' } } } }
+  )
+  t.deepEqual(buildRef({}, [ creator, mainEntity ], 'creator'),
+    { [REFS]: { creator: {
+      Person_user0: { id: 'user0', type: 'Person' },
+      DataFeed_pBlf: { id: 'pBlf', type: 'DataFeed' },
+    } } }
+  )
   t.end()
 })
 test('getRef', (t) => {

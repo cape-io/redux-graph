@@ -1,5 +1,6 @@
 import {
-  ary, curry, get, isPlainObject, isString, now, partialRight, pickBy, rearg, reduce, set,
+  ary, curry, get, isArray, isPlainObject, isString, now,
+  partial, partialRight, pickBy, rearg, reduce, set,
 } from 'lodash'
 import { omit, pick } from 'lodash/fp'
 import { setIn } from 'cape-redux'
@@ -44,8 +45,13 @@ export function setRef(subject, predicate, obj) {
 export function setRefs(subject, predicate, obj) {
   return setIn(getRefPath(predicate, obj), subject, pickTypeId(obj))
 }
+
 export function buildRef(result, val, predicate) {
+  function setArrayRefs(subject, obj) {
+    return setIn(getRefPath(predicate, obj), subject, pickTypeId(obj))
+  }
   // Does not support merging previously set REF field.
+  if (isArray(val)) return reduce(val, setArrayRefs, result)
   if (isEntityCreated(val)) return setRef(result, predicate, val)
   return set(result, predicate, val)
 }

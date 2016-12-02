@@ -14,7 +14,6 @@ export const creator = {
 export const item = {
   approxWidth: '57"',
   category: 'textile',
-  colors: [],
   contents: '100% Solution Dyed Acrylic',
   dateCreated: now(),
   dateModified: now(),
