@@ -3,7 +3,7 @@ import { combineReducers, createStore } from 'redux'
 import graph, { entityPutAll } from '../src'
 
 export const fido = { id: 'dgo14', type: 'Animal', name: 'fido' }
-export const mainEntity = { id: 'pBlf', type: 'DataFeed', dog: fido }
+export const mainEntity = { id: 'pBlf', type: 'DataFeed', dog: fido, name: 'Christ' }
 export const agent = { id: 'ag12', type: 'Person', name: 'Silly Sam' }
 export const creator = {
   id: 'user0',

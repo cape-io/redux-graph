@@ -1,4 +1,4 @@
-import { curry, filter, flow, get, isEmpty, mapValues, nthArg, property } from 'lodash'
+import { curry, filter, flow, get, identity, isEmpty, mapValues, nthArg, property } from 'lodash'
 import { merge } from 'cape-lodash'
 import { createSelector } from 'reselect'
 import { select, simpleSelector } from 'cape-select'
@@ -20,9 +20,9 @@ export const pickRefNodes = curry((deep, graph, refs) => {
 // Get one level of REF fields.
 export const buildFullEntity = curry((deep, graph, node) => {
   if (!node || (isEmpty(node[REF]) && isEmpty(node[REFS]))) return rmRefs(node)
-  function getPredRefs(predRefs) {
-    return mapValues(predRefs, flow(getGraphNode(graph), buildFullEntity(deep, graph)))
-  }
+  const getPredRefs = predRefs => mapValues(predRefs,
+    flow(getGraphNode(graph), deep ? buildFullEntity(deep, graph) : identity)
+  )
   return merge(
     rmRefs(node),
     pickRefNodes(deep, graph, node[REF]),

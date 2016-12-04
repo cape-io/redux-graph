@@ -1,3 +1,7 @@
+## [2.9.0]
+
+* Trying to fix callstack issue with `buildFullEntity()`. Limiting depth 0 on refs instead of 1 as before.
+
 ## [2.8.1]
 
 * Trying to fix callstack issue with `buildFullEntity()`.

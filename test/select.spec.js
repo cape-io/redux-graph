@@ -4,7 +4,7 @@ import { isFunction, property, size } from 'lodash'
 import {
   buildFullEntity, getFullEntity, fullEntitySelector,
   entitySelector, entityTypeSelector, getGraphNode, pickRefNodes, requireIdType, selectGraph,
-  triplePut, GRAPH_KEY, getAllChildren, allChildrenSelector,
+  triplePut, GRAPH_KEY, getAllChildren, allChildrenSelector, REFS,
 } from '../src'
 import { agent, creator, configStore, fido, li34, mainEntity } from './mock'
 
@@ -45,10 +45,19 @@ test('pickRefNodes', (t) => {
 test('buildFullEntity', (t) => {
   dispatch(triplePut({ subject: li34, predicate: 'likes', object: mainEntity }))
   const ste = getState()
-  const res = buildFullEntity(false, ste[GRAPH_KEY], ste[GRAPH_KEY].ListItem.li34)
+  const node = ste[GRAPH_KEY].ListItem.li34
+  t.deepEqual(node[REFS], { likes: { DataFeed_pBlf: { id: 'pBlf', type: 'DataFeed' } } })
+  const res = buildFullEntity(0, ste[GRAPH_KEY], node)
   t.deepEqual(res.agent, ste[GRAPH_KEY].Person.ag12, 'agent')
   t.deepEqual(res.item, ste[GRAPH_KEY].Item.i28z, 'item')
-  t.equal(res.likes.DataFeed_pBlf.dog.id, 'dgo14')
+  t.equal(res.likes.DataFeed_pBlf.name, 'Christ')
+  dispatch(triplePut({ subject: mainEntity, predicate: 'likedBy', object: li34 }))
+  const ste2 = getState()
+  const node2 = ste2[GRAPH_KEY].ListItem.li34
+  const res2 = buildFullEntity(0, ste2[GRAPH_KEY], node2)
+  t.deepEqual(res2.agent, ste[GRAPH_KEY].Person.ag12, 'agent')
+  t.deepEqual(res2.item, ste[GRAPH_KEY].Item.i28z, 'item')
+  t.equal(res2.likes.DataFeed_pBlf.name, 'Christ')
   // console.log(res.likes.DataFeed_pBlf)
   t.end()
 })
@@ -59,7 +68,7 @@ test('getFullEntity', (t) => {
   // console.log(res)
   t.deepEqual(res.agent, ste[GRAPH_KEY].Person.ag12, 'agent')
   t.deepEqual(res.item, ste[GRAPH_KEY].Item.i28z, 'item')
-  t.deepEqual(res.likes.DataFeed_pBlf.dog, ste[GRAPH_KEY].Animal.dgo14, 'likes dog')
+  t.equal(res.likes.DataFeed_pBlf.name, 'Christ')
   const res2 = getFullEntity(ste, ste[GRAPH_KEY].ListItem.li34)
   t.equal(res, res2)
   t.end()
@@ -67,8 +76,10 @@ test('getFullEntity', (t) => {
 test('getAllChildren', (t) => {
   dispatch(triplePut({ subject: fido, predicate: 'friend', object: creator }))
   const ste = getState()
-  const res = getAllChildren(ste, ste[GRAPH_KEY].ListItem.li34)
-  t.equal(res.likes.DataFeed_pBlf.dog.friend.Person_user0.id, 'user0')
+  const node = ste[GRAPH_KEY].DataFeed.pBlf
+  delete node[REFS]
+  const res = getAllChildren(ste, ste[GRAPH_KEY].DataFeed.pBlf)
+  t.equal(res.dog.friend.Person_user0.image, null)
   // console.log(JSON.stringify(res, null, 2))
   t.end()
 })
