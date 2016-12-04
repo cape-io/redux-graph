@@ -1,3 +1,7 @@
+## [2.8.1]
+
+* Trying to fix callstack issue with `buildFullEntity()`.
+
 ## [1.6.2]
 
 * fix entity update reducer function.

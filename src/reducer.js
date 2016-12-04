@@ -1,5 +1,6 @@
 import { ary, get, isEmpty, omit, partialRight, reduce } from 'lodash'
-import { createReducer, merge, setIn } from 'cape-redux'
+import { createReducer } from 'cape-redux'
+import { merge, setIn } from 'cape-lodash'
 
 import { ENTITY_DEL, ENTITY_PUT, ENTITY_PUTALL, ENTITY_UPDATE, TRIPLE_PUT } from './actions'
 import {

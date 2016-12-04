@@ -1,5 +1,5 @@
-import { curry, filter, flow, get, isEmpty, mapValues, merge, nthArg, property } from 'lodash'
-// import { condId, overBranch } from 'cape-lodash'
+import { curry, filter, flow, get, isEmpty, mapValues, nthArg, property } from 'lodash'
+import { merge } from 'cape-lodash'
 import { createSelector } from 'reselect'
 import { select, simpleSelector } from 'cape-select'
 import { getPath, REF, REFS, rmRefs } from './helpers'
@@ -13,6 +13,7 @@ export const getEntity = curry((state, entity) => entitySelector(entity)(state))
 
 export const getGraphNode = curry((graph, node) => get(graph, getPath(node), node))
 export const pickRefNodes = curry((deep, graph, refs) => {
+  if (!refs) return {}
   if (deep) return mapValues(refs, flow(getGraphNode(graph), buildFullEntity(deep - 1, graph))) // eslint-disable-line
   return mapValues(refs, getGraphNode(graph))
 })
@@ -22,10 +23,10 @@ export const buildFullEntity = curry((deep, graph, node) => {
   function getPredRefs(predRefs) {
     return mapValues(predRefs, flow(getGraphNode(graph), buildFullEntity(deep, graph)))
   }
-  return merge({},
+  return merge(
     rmRefs(node),
     pickRefNodes(deep, graph, node[REF]),
-    mapValues(node[REFS], getPredRefs)
+    node[REFS] ? mapValues(node[REFS], getPredRefs) : {}
   )
 })
 // (state, entityObj) simpleSelector

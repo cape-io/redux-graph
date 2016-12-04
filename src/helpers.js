@@ -1,9 +1,9 @@
 import {
   ary, curry, get, isArray, isPlainObject, isString, now,
-  partial, partialRight, pickBy, rearg, reduce, set,
+  partialRight, pickBy, rearg, reduce, set,
 } from 'lodash'
 import { omit, pick } from 'lodash/fp'
-import { setIn } from 'cape-redux'
+import { setIn } from 'cape-lodash'
 import { isEntityCreated, getTripleError, isValidId, isValidType } from './lang'
 
 export const REF = '_ref'
