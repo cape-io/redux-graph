@@ -9,7 +9,7 @@ export function isValidType(type) {
   return isString(type) && type.length > 2 && type[0] === type[0].toUpperCase()
 }
 export function isValidId(id) {
-  return isString(id) && id.length > 3
+  return isString(id) && id.length > 2
 }
 // Check to see if object has required fields to be an entity.
 const entity = { type: isValidType }

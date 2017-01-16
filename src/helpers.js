@@ -24,7 +24,10 @@ export function requireIdType(props, typeId = null, doPick = true) {
     console.error(props)
     throw new Error('Must have a valid type.')
   }
-  if (!isValidId(props.id)) throw new Error('Must have a valid id.')
+  if (!isValidId(props.id)) {
+    console.error(props)
+    throw new Error('Must have a valid id.')
+  }
   if (typeId && props.type !== typeId) throw new Error('Wrong entity type.')
   return doPick ? pickTypeId(props) : null
 }
