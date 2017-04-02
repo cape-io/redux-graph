@@ -2,7 +2,7 @@ import test from 'tape'
 import { every, get, isFunction, partial, size } from 'lodash'
 
 import {
-  buildRef, buildRefs, fullRefPath, getRef, getKey, getPath, getRefPath, hasPredicate,
+  buildRef, buildRefs, buildTriple, fullRefPath, getRef, getKey, getPath, getRefPath, hasPredicate,
   insertFields, nextId, predicateFilter, entityTypeSelector, isEntityCreatedDate,
   pickTypeId, rangePath, REF, REFS, refMatch, requireIdType, setRef, setRangeIncludes, isValidId,
   entityMatch, entityMatches,
@@ -11,7 +11,13 @@ import {
 import { agent, configStore, creator, item, mainEntity } from './mock'
 
 const { getState } = configStore()
-
+test('buildTriple', (t) => {
+  const tpl = buildTriple({ object: creator, predicate: 'creator', subject: item, single: 1 })
+  t.equal(tpl.single, true)
+  t.deepEqual(tpl.object, { type: 'Person', id: 'user0' })
+  t.deepEqual(tpl.subject, { type: 'Item', id: 'i28z', dateModified: item.dateModified })
+  t.end()
+})
 test('nextId', (t) => {
   t.ok(isValidId(nextId()))
   t.end()

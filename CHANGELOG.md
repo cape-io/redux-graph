@@ -1,3 +1,8 @@
+## [2.11.0]
+
+* `triplePut()` now accepts a `single` boolean property within the triple object to signify if it should be added to as a singular ref or multiple refs.
+* `getPath()` 2nd arg can be a fieldId.
+
 ## [2.10.0]
 
 * `isValidId()` accepts 3 string ids.

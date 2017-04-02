@@ -37,7 +37,7 @@ test('entityHasType', t => {
 })
 test('isValidId', (t) => {
   t.false(isValidId(''))
-  t.false(isValidId('abc'))
+  t.false(isValidId('ab'))
   t.ok(isValidId(item.id))
   t.end()
 })

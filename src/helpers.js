@@ -17,6 +17,7 @@ export function nextId() {
 export function getKey({ type, id }) {
   return `${type}_${id}`
 }
+// @TODO Need a better name for this!
 export const pickTypeId = pick([ 'dateModified', 'id', 'type' ])
 export function requireIdType(props, typeId = null, doPick = true) {
   if (!isPlainObject(props)) throw new Error('Must pass an object.')
@@ -31,9 +32,11 @@ export function requireIdType(props, typeId = null, doPick = true) {
   if (typeId && props.type !== typeId) throw new Error('Wrong entity type.')
   return doPick ? pickTypeId(props) : null
 }
-export function getPath(item) {
+export function getPath(item, fieldId) {
   requireIdType(item, null, false)
-  return [ item.type, item.id ]
+  const path = [ item.type, item.id ]
+  if (fieldId) path.push(fieldId)
+  return path
 }
 export function getRefPath(predicate, obj) {
   if (!isString(predicate)) throw new Error('predicate must be a string.')
@@ -106,13 +109,18 @@ export function tripleErr(triple) {
   const errMsg = getTripleError(triple)
   if (errMsg) throw new Error(errMsg)
 }
+// You may send it a full entity for subject and object.
+// Predicate should be a text string.
+// @see lang/getTripleError()
 export function buildTriple(triple) {
   tripleErr(triple)
-  return {
+  const result = {
     subject: pickTypeId(triple.subject),
     predicate: triple.predicate,
     object: pickTypeId(triple.object),
   }
+  if (triple.single || triple.ref || triple.multi === false) result.single = true
+  return result
 }
 
 export function rangePath(obj, predicate, subj, subjKey) {
