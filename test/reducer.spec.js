@@ -2,7 +2,7 @@ import test from 'tape'
 import { isNumber, isMatch } from 'lodash'
 import { getKey, insertFields, updateFields, REF, REFS } from '../src'
 import {
-  entityUpdateReducer, entityPutReducer, entityPutAllReducer, putRefs, updateSubjRef,
+  delRefs, entityUpdateReducer, entityPutReducer, entityPutAllReducer, putRefs, updateSubjRef,
 } from '../src/reducer'
 import { agent, collection, creator, item } from './mock'
 
@@ -66,5 +66,12 @@ test('putRefs', (t) => {
   t.equal(st2.Person[creator.id].foo, 'bar21')
   t.deepEqual(st2.Person[creator.id][REF], st1.Person[creator.id][REF])
   t.deepEqual(st2.Person[creator.id][REFS], st1.Person[creator.id][REFS])
+  t.end()
+})
+test('delRefs', (t) => {
+  const st1 = putRefs(state, { subject: creator, predicate: 'friend', object: agent, single: 1 })
+  t.equal(st1.Person[creator.id][REF].friend.id, agent.id)
+  const st2 = delRefs(st1, { subject: creator, predicate: 'friend', single: 1 })
+  t.equal(st2.Person[creator.id][REF].friend, null, 'deleted')
   t.end()
 })

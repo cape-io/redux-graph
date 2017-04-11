@@ -2,7 +2,7 @@ import test from 'tape'
 import { forEach, get, isArray, isMatch, isNumber, omit } from 'lodash'
 import {
   entityDel, ENTITY_DEL, entityPut, ENTITY_PUT, entityPutAll, ENTITY_PUTALL,
-  entityUpdate, ENTITY_UPDATE, pickTypeId, triplePut, TRIPLE_PUT,
+  entityUpdate, ENTITY_UPDATE, pickTypeId, tripleDel, TRIPLE_DEL, triplePut, TRIPLE_PUT,
 } from '../src'
 import { agent, creator, item, mainEntity } from './mock'
 
@@ -50,6 +50,18 @@ test('triplePut', (t) => {
   const act = triplePut({ subject: creator, predicate: 'item', object: item, extra: true })
   t.equal(act.type, TRIPLE_PUT, 'action type')
   t.deepEqual(act.payload, {
+    predicate: 'item', subject: pickTypeId(creator), object: pickTypeId(item),
+  })
+  t.end()
+})
+test('tripleDel', (t) => {
+  const act = tripleDel({ subject: creator, predicate: 'item', object: item, single: true })
+  t.equal(act.type, TRIPLE_DEL, 'action type')
+  t.deepEqual(act.payload, {
+    predicate: 'item', subject: pickTypeId(creator), object: null, single: true,
+  })
+  const act2 = tripleDel({ subject: creator, predicate: 'item', object: item })
+  t.deepEqual(act2.payload, {
     predicate: 'item', subject: pickTypeId(creator), object: pickTypeId(item),
   })
   t.end()

@@ -1,6 +1,6 @@
 import { isArray, map } from 'lodash'
 import { createAction } from 'cape-redux'
-import { insertFields, updateFields, requireIdType, buildTriple } from './helpers'
+import { insertFields, updateFields, requireIdType, buildTriple, buildTripleDel } from './helpers'
 
 export const ENTITY_DEL = 'graph/ENTITY_DEL'
 export const entityDel = createAction(ENTITY_DEL, requireIdType)
@@ -17,6 +17,9 @@ export const entityPutAll = createAction(ENTITY_PUTALL, values => {
 
 export const ENTITY_UPDATE = 'graph/ENTITY_UPDATE'
 export const entityUpdate = createAction(ENTITY_UPDATE, updateFields)
+
+export const TRIPLE_DEL = 'graph/TRIPLE_DEL'
+export const tripleDel = createAction(TRIPLE_DEL, buildTripleDel)
 
 export const TRIPLE_PUT = 'graph/TRIPLE_PUT'
 // You send it an object with an id, object, subject and predicate properties.

@@ -1,3 +1,7 @@
+## [2.12.0]
+
+* `tripleDel()` action.
+
 ## [2.11.0]
 
 * `triplePut()` now accepts a `single` boolean property within the triple object to signify if it should be added to as a singular ref or multiple refs.

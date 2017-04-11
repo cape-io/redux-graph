@@ -973,23 +973,23 @@ camelcase@^1.0.2:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/camelcase/-/camelcase-1.2.1.tgz#9bb5304d2e0b56698b2c758b08a3eaa9daa58a39"
 
-cape-lodash@^1.7.0, cape-lodash@^1.8.0, cape-lodash@^1.9.1:
-  version "1.9.1"
-  resolved "https://registry.yarnpkg.com/cape-lodash/-/cape-lodash-1.9.1.tgz#71418250125f7dd7fcb209ff22f61dad9f87118e"
+cape-lodash@^1.11.0, cape-lodash@^1.7.0, cape-lodash@^1.8.0:
+  version "1.11.0"
+  resolved "https://registry.yarnpkg.com/cape-lodash/-/cape-lodash-1.11.0.tgz#ba6d6d20e20bc771dcfcf32775d395fda4fb5007"
   dependencies:
     lodash "^4.17.2"
 
-cape-redux@3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/cape-redux/-/cape-redux-3.0.0.tgz#fb37ee4380c3e40f707ad922f5dc4a06db68059c"
+cape-redux@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/cape-redux/-/cape-redux-3.1.0.tgz#ae657a5bdc1c5deba51d1e5912aa6ad98ee73a5e"
   dependencies:
     cape-lodash "^1.8.0"
     lodash "^4.17.2"
     redux "^3.6.0"
 
-cape-select@^2.3.2:
-  version "2.3.2"
-  resolved "https://registry.yarnpkg.com/cape-select/-/cape-select-2.3.2.tgz#4a4f269ba7cd118bbd599cf3bed3bb56ce8aa872"
+cape-select@^2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/cape-select/-/cape-select-2.4.0.tgz#c4682a65e9b4c3c57bdaa8ad2e8e6012fa963c5f"
   dependencies:
     cape-lodash "^1.7.0"
     lodash "^4.17.2"
@@ -2225,9 +2225,9 @@ lodash.pickby@^4.6.0:
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/lodash.pickby/-/lodash.pickby-4.6.0.tgz#7dea21d8c18d7703a27c704c15d3b84a67e33aff"
 
-lodash@^4.0.0, lodash@^4.17.2, lodash@^4.2.0, lodash@^4.2.1, lodash@^4.3.0, lodash@^4.6.1:
-  version "4.17.2"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.2.tgz#34a3055babe04ce42467b607d700072c7ff6bf42"
+lodash@^4.0.0, lodash@^4.17.2, lodash@^4.17.4, lodash@^4.2.0, lodash@^4.2.1, lodash@^4.3.0, lodash@^4.6.1:
+  version "4.17.4"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
 
 longest@^1.0.1:
   version "1.0.1"
@@ -2862,9 +2862,9 @@ require-uncached@^1.0.2:
     caller-path "^0.1.0"
     resolve-from "^1.0.0"
 
-reselect@^2.5.4:
-  version "2.5.4"
-  resolved "https://registry.yarnpkg.com/reselect/-/reselect-2.5.4.tgz#b7d23fdf00b83fa7ad0279546f8dbbbd765c7047"
+reselect@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/reselect/-/reselect-3.0.0.tgz#b2e35977f03048700028eaee3a8c0639e40e8f35"
 
 resolve-from@^1.0.0:
   version "1.0.1"

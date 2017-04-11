@@ -29,12 +29,12 @@ const errMsgs = {
   objEnt: 'Triple must include object prop.',
 }
 
-export function getTripleError(triple) {
+export function getTripleError(triple, checkObj = true) {
   const { subject, predicate, object } = triple
   if (!isPlainObject(triple)) return errMsgs.plainObj
   if (!isEntityCreated(subject)) return errMsgs.subEnt
   if (!isString(predicate)) return errMsgs.predicate
-  if (!isEntityCreated(object)) return errMsgs.objEnt
+  if (checkObj && !isEntityCreated(object)) return errMsgs.objEnt
   return false
 }
 export const isTriple = negate(getTripleError)

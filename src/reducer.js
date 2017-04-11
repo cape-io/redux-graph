@@ -2,7 +2,8 @@ import { ary, get, isEmpty, omit, partialRight, reduce } from 'lodash'
 import { createReducer } from 'cape-redux'
 import { merge, setIn } from 'cape-lodash'
 
-import { ENTITY_DEL, ENTITY_PUT, ENTITY_PUTALL, ENTITY_UPDATE, TRIPLE_PUT } from './actions'
+import {
+  ENTITY_DEL, ENTITY_PUT, ENTITY_PUTALL, ENTITY_UPDATE, TRIPLE_DEL, TRIPLE_PUT } from './actions'
 import {
   getKey, fullRefPath, getPath, setRangeIncludes, rangePath, REF, REFS, pickTypeId,
 } from './helpers'
@@ -27,6 +28,7 @@ export function mergeIndexes(oldItem, item) {
 // Insert or replace entity.
 export function entityPutReducer(state, item) {
   const path = getPath(item)
+  // I'm not so sure you want to mergeIndexes here? How do you know when to delete?
   const node = mergeIndexes(get(state, path), item)
   const newState = setIn(path, state, node)
   return updateRefObjs(newState, node)
@@ -74,15 +76,22 @@ export function entityDelReducer(state, item) {
   return delAt(getPath(item), state)
 }
 
-export function putRef(state, { subject, predicate, object }) {
+export function putRef(state, subject, predicate, object) {
   return setIn(fullRefPath(subject, predicate), state, object)
 }
 // Single vs many?
-export function putRefs(state, { single, ...triple }) {
-  if (single) return putRef(state, triple)
-  const { subject, predicate, object } = triple
+export function putRefs(state, triple) {
+  const { single, subject, predicate, object } = triple
+  if (single) return putRef(state, subject, predicate, object)
   const ste1 = setIn(fullRefPath(subject, predicate, object), state, object)
   return setRangeIncludes(ste1, object, predicate, subject)
+}
+
+export function delRefs(state, triple) {
+  const { single, subject, predicate, object } = triple
+  if (single) return putRef(state, subject, predicate, null)
+  // @TODO REFS DEL
+  return delAt(fullRefPath(subject, predicate, object), state)
 }
 
 export const reducers = {
@@ -90,7 +99,7 @@ export const reducers = {
   [ENTITY_UPDATE]: entityUpdateReducer,
   [ENTITY_DEL]: entityDelReducer,
   [ENTITY_PUTALL]: entityPutAllReducer,
-  // [REF_PUT]: refPut,
+  [TRIPLE_DEL]: delRefs,
   [TRIPLE_PUT]: putRefs,
 }
 const reducer = createReducer(reducers)

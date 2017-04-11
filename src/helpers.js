@@ -1,5 +1,5 @@
 import {
-  ary, curry, get, isArray, isPlainObject, isString, now,
+  ary, curry, flow, get, isArray, isPlainObject, isString, now,
   partialRight, pickBy, rearg, reduce, set,
 } from 'lodash'
 import { omit, pick } from 'lodash/fp'
@@ -105,9 +105,11 @@ export function updateFields(data) {
 }
 export function uniqEntity(type) { return insertFields({ type }) }
 
-export function tripleErr(triple) {
-  const errMsg = getTripleError(triple)
+export const tripleErr = flow(getTripleError, (errMsg) => {
   if (errMsg) throw new Error(errMsg)
+})
+export function isSingle({ single, ref, multi }) {
+  return single || ref || multi === false
 }
 // You may send it a full entity for subject and object.
 // Predicate should be a text string.
@@ -119,10 +121,20 @@ export function buildTriple(triple) {
     predicate: triple.predicate,
     object: pickTypeId(triple.object),
   }
-  if (triple.single || triple.ref || triple.multi === false) result.single = true
+  if (isSingle(triple)) result.single = true
   return result
 }
-
+export function buildTripleDel(triple) {
+  tripleErr(triple, false)
+  const single = isSingle(triple) || !triple.object
+  const result = {
+    subject: pickTypeId(triple.subject),
+    predicate: triple.predicate,
+    object: single ? null : pickTypeId(triple.object),
+  }
+  if (single) result.single = true
+  return result
+}
 export function rangePath(obj, predicate, subj, subjKey) {
   const key = subjKey || getKey(subj)
   return getPath(obj).concat([ 'rangeIncludes', predicate, key ])
