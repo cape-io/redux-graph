@@ -72,6 +72,6 @@ test('delRefs', (t) => {
   const st1 = putRefs(state, { subject: creator, predicate: 'friend', object: agent, single: 1 })
   t.equal(st1.Person[creator.id][REF].friend.id, agent.id)
   const st2 = delRefs(st1, { subject: creator, predicate: 'friend', single: 1 })
-  t.equal(st2.Person[creator.id][REF].friend, null, 'deleted')
+  t.equal(st2.Person[creator.id][REF].friend, undefined, 'deleted')
   t.end()
 })

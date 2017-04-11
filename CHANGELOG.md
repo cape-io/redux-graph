@@ -1,3 +1,7 @@
+## [2.12.1]
+
+*  Re: `tripleDel()`. `delRefs()` should delete REF field instead of setting `null` value.
+
 ## [2.12.0]
 
 * `tripleDel()` action.

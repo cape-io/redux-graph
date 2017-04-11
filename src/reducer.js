@@ -89,7 +89,7 @@ export function putRefs(state, triple) {
 
 export function delRefs(state, triple) {
   const { single, subject, predicate, object } = triple
-  if (single) return putRef(state, subject, predicate, null)
+  if (single) return delAt(fullRefPath(subject, predicate), state)
   // @TODO REFS DEL
   return delAt(fullRefPath(subject, predicate, object), state)
 }
