@@ -64,17 +64,32 @@ export function delAt(path, state) {
   const omitKey = path.pop()
   return setIn(path, state, omit(get(state, path), omitKey))
 }
-export function delRange(state, obj, predicate, subj) {
-  // console.log('pred', predicate, obj, subj)
+export function delRefRange(state, obj, predicate, subj) {
   return delAt(rangePath(obj, predicate, subj), state)
 }
+export function delRefsRange(state, objs, predicate, subj) {
+  function delPath(res, obj) {
+    const path = rangePath(obj, predicate, subj)
+    return delAt(path, res)
+  }
+  return reduce(objs, delPath, state)
+}
+
 // Remove from all rangeIncludes.
-export function delRanges(state, item) {
+export function delRefRanges(state, item) {
   if (isEmpty(item[REF])) return state
-  return reduce(item[REF], ary(partialRight(delRange, item), 3), state)
+  return reduce(item[REF], ary(partialRight(delRefRange, item), 3), state)
+}
+export function delRefsRanges(state, item) {
+  if (isEmpty(item[REFS])) return state
+  return reduce(item[REFS], ary(partialRight(delRefsRange, item), 3), state)
+}
+export function delRanges(state, item) {
+  if (isEmpty(item[REF]) && isEmpty(item[REFS])) return state
+  return delRefsRanges(delRefRanges(state, item), item)
 }
 export function entityDelReducer(state, item) {
-  const entity = get(state, getPath(item))
+  const entity = { ...item, ...get(state, getPath(item)) }
   return delAt(getPath(item), delRanges(state, entity))
 }
 
