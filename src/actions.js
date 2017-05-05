@@ -17,6 +17,9 @@ export const entityPutAll = createAction(ENTITY_PUTALL, values => {
 
 export const ENTITY_UPDATE = 'graph/ENTITY_UPDATE'
 export const entityUpdate = createAction(ENTITY_UPDATE, updateFields)
+export function entityUpdateFields(entity, fields) {
+  return entityUpdate({ ...requireIdType(entity), ...fields })
+}
 
 export const TRIPLE_DEL = 'graph/TRIPLE_DEL'
 export const tripleDel = createAction(TRIPLE_DEL, buildTripleDel)

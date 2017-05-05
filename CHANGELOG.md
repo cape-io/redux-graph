@@ -1,3 +1,7 @@
+## [2.13.0]
+
+* `entityUpdateFields(entity, fields)` Will update an entity based on the fields object only.
+
 ## [2.12.1]
 
 *  Re: `tripleDel()`. `delRefs()` should delete REF field instead of setting `null` value.

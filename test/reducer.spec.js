@@ -1,8 +1,9 @@
 import test from 'tape'
-import { isNumber, isMatch } from 'lodash'
-import { getKey, insertFields, updateFields, REF, REFS } from '../src'
+import { find, isNumber, isMatch } from 'lodash'
+import { entityDel, getKey, insertFields, updateFields, REF, REFS } from '../src'
 import {
-  delRefs, entityUpdateReducer, entityPutReducer, entityPutAllReducer, putRefs, updateSubjRef,
+  delRefs, entityDelReducer, entityUpdateReducer, entityPutReducer, entityPutAllReducer,
+  putRefs, updateSubjRef,
 } from '../src/reducer'
 import { agent, collection, creator, item } from './mock'
 
@@ -66,6 +67,7 @@ test('putRefs', (t) => {
   t.equal(st2.Person[creator.id].foo, 'bar21')
   t.deepEqual(st2.Person[creator.id][REF], st1.Person[creator.id][REF])
   t.deepEqual(st2.Person[creator.id][REFS], st1.Person[creator.id][REFS])
+  // console.log(st2)
   t.end()
 })
 test('delRefs', (t) => {
@@ -73,5 +75,14 @@ test('delRefs', (t) => {
   t.equal(st1.Person[creator.id][REF].friend.id, agent.id)
   const st2 = delRefs(st1, { subject: creator, predicate: 'friend', single: 1 })
   t.equal(st2.Person[creator.id][REF].friend, undefined, 'deleted')
+  t.end()
+})
+test('entityDelReducer', (t) => {
+  // console.log(state.Person.user0.rangeIncludes)
+  const list = find(state.CollectionList)
+  const st1 = entityDelReducer(state, entityDel(list).payload)
+  // console.log(st1.Person.user0)
+  t.deepEqual(st1.Person.user0.rangeIncludes, { creator: {} })
+  t.deepEqual(st1.CollectionList, {})
   t.end()
 })
